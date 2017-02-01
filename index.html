@@ -5,6 +5,8 @@
       uniform vec2 iResolution;
       uniform vec3 cameraPos;
       uniform vec3 cameraDir;
+      const float row_size = 64.0;
+      const float col_size = 64.0;
       const float EPS = 0.01;
       const float OFFSET = EPS * 100.0;
       const float bevel = 0.8;
@@ -53,7 +55,7 @@
       // Adapted from cabbibo https://www.shadertoy.com/view/Xl2XWt
       // --------------------------------------------------------
 
-      const float MAX_TRACE_DISTANCE = 600.; // max trace distance
+      const float MAX_TRACE_DISTANCE = 1200.; // max trace distance
       const float INTERSECTION_PRECISION = .001; // precision of the intersection
       const int NUM_OF_TRACE_STEPS = 100;
       const float FUDGE_FACTOR = .9; // Default is 1, reduce to fix overshoots
@@ -111,16 +113,16 @@
         float g = 0.3;
         float b = 0.3;
 
-        index.x /= 64.0;
-        index.y /= 64.0;
+        index.x /= row_size;
+        index.y /= col_size;
 
         vec4 offset = texture2D(tex, index);
 
-
+        pC.y += (1.0 - offset.x)*10.0;
         pMod2(pC.xz, vec2(8.0, 8.0));
         float d = length(max(abs(pC)-dimensions,0.0))-radius;
 
-        return Model(d, vec3(offset.x, offset.y, offset.z), 0.12);
+        return Model(d, vec3(.7, .7, .7), 0.12);
       }
 
       // Plane with normal n (n is normalized) at some distance from the origin
@@ -175,7 +177,7 @@
           }
           vec3 rayVec = ray.origin + ray.direction * ray.len;
           boxModel = roundBox(rayVec, box, bevel);
-          planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.3, 0.3, 0.3), 0.0);
+          planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.15, 0.15, 0.15), 0.0);
 
           model = boxModel;
           if (planeModel.dist < boxModel.dist) {
@@ -198,7 +200,7 @@
           normal = calcNormal(pos);
           if (planeModel.dist < boxModel.dist) {
             // normal = vec3(0, 1, 0);
-            float test = abs(pos.x - 4.7);
+            float test = abs(pos.x);
             pModInterval1(test, 8.0, 0.0, 500.0);
             test = step(3.3, test);
             test = 1.0 - test;
@@ -345,8 +347,8 @@
       var clock = new THREE.Clock();
       var texture;
       var gl;
-      var ROW_SIZE = 32;
-      var COL_SIZE = 32;
+      var ROW_SIZE = 64;
+      var COL_SIZE = 64;
       var grid = [];
 
       init();
@@ -356,7 +358,7 @@
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera();
         dummyCamera = new THREE.Camera();
-        camera.position.set(0, 100, 0);
+        camera.position.set(0, 270, 0);
         camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
         geometry = new THREE.PlaneBufferGeometry( 2.0, 2.0 );
         renderer = new THREE.WebGLRenderer();
@@ -366,8 +368,8 @@
         gl = renderer.getContext();
 
 
-        var theOffsets = new Float32Array(4096);
-        texture = textureFromFloats(gl, 32, 32, theOffsets);
+        var theOffsets = new Float32Array(ROW_SIZE*COL_SIZE*4);
+        texture = textureFromFloats(gl, ROW_SIZE, COL_SIZE, theOffsets);
         texture.needsUpdate = true;
 
         initGrid();
@@ -410,12 +412,91 @@
           var row = [];
 
           for (var j = 0; j < ROW_SIZE; j++) {
-            var val = Math.round(Math.random());
-            row[j] = [val, val, val, val];
+            var val = Math.random();
+            if (val < .9) {
+              val = 1;
+            } else {
+              val = 0;
+            }
+            row[j] = [val,0,0,0];
           }
 
           grid[i] = row;
         }
+      }
+
+      var otherGrid;
+
+      function stepConwaysGame(grid) {
+        var cellsToToggle = [];
+
+        for (var i = 0; i < COL_SIZE; i++) {
+          for (var j = 0; j < ROW_SIZE; j++) {
+
+            var oldState = grid[i][j][0];
+            var alive = oldState === 1;
+            var neighborCount = liveNeighborCount(grid, i, j);
+
+            var newState = newCellState(alive, neighborCount);
+            
+            if (newState !== oldState) {
+              cellsToToggle.push(i);
+              cellsToToggle.push(j);
+            }
+          }
+        }
+
+        for (i = 0; i < cellsToToggle.length; i+=2) {
+          var row = cellsToToggle[i];
+          var col = cellsToToggle[i+1];
+          var cell = grid[row][col];
+
+          if (cell[0] === 1) {
+            newState = 0;
+          } else {
+            newState = 1;
+          }
+          cell[0] = newState;
+          cell[1] = newState;
+          cell[2] = newState;
+          cell[3] = newState;
+        }
+      }
+
+      function newCellState(alive, neighborCount) {
+        if (alive && neighborCount < 2) {
+          return 0;
+        } else if (alive && (neighborCount === 2 || neighborCount === 3)) {
+          return 1;
+        } else if (alive && neighborCount > 3) {
+          return 0;
+        } else if (!alive && neighborCount === 3) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+
+      function liveNeighborCount(grid, row, col) {
+        var leftNeighbor = 0;
+        var rightNeighbor = 0;
+        var topNeighbor = 0;
+        var bottomNeighbor = 0;
+
+        if (col > 0) {
+          leftNeighbor = grid[row][col-1][0];
+        }
+        if (col < ROW_SIZE-1) {
+          rightNeighbor = grid[row][col+1][0];
+        }
+        if (row > 0) {
+          bottomNeighbor = grid[row-1][col][0];
+        }
+        if (row < COL_SIZE-1) {
+          topNeighbor = grid[row+1][col][0];
+        }
+
+        return leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor;
       }
 
       function updateDataTextureFromGrid(grid) {
@@ -431,16 +512,25 @@
         texture.needsUpdate = true;
       }
 
+      var timeSinceUpdate = 0;
+
       function render( timestamp ) {
         var delta = clock.getDelta();
+
+        timeSinceUpdate += delta*1000;
+
+        if (timeSinceUpdate > 300) {
+          stepConwaysGame(grid);
+          timeSinceUpdate -= 300;
+          updateDataTextureFromGrid(grid);
+        }
+
         stats.begin();
         controls.update( delta );
         if ( camera.position.y < 0 ) camera.position.y = 0;
         material.uniforms.iResolution.value = new THREE.Vector2( canvas.width, canvas.height );
         material.uniforms.cameraPos.value = camera.getWorldPosition();
         material.uniforms.cameraDir.value = camera.getWorldDirection();
-
-        updateDataTextureFromGrid(grid);
 
         renderer.render( scene, dummyCamera );
         stats.end();
