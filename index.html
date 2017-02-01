@@ -45,7 +45,7 @@
         vec3 col = mix(albedo * lin, albedo, model.glow);    
 
         return col;
-      }   
+      }
 
 
       // --------------------------------------------------------
@@ -53,7 +53,7 @@
       // Adapted from cabbibo https://www.shadertoy.com/view/Xl2XWt
       // --------------------------------------------------------
 
-      const float MAX_TRACE_DISTANCE = 200.; // max trace distance
+      const float MAX_TRACE_DISTANCE = 600.; // max trace distance
       const float INTERSECTION_PRECISION = .001; // precision of the intersection
       const int NUM_OF_TRACE_STEPS = 100;
       const float FUDGE_FACTOR = .9; // Default is 1, reduce to fix overshoots
@@ -117,11 +117,10 @@
         vec4 offset = texture2D(tex, index);
 
 
-        pC.x -= offset.x;
         pMod2(pC.xz, vec2(8.0, 8.0));
         float d = length(max(abs(pC)-dimensions,0.0))-radius;
 
-        return Model(d, vec3(0.7, 0.7, 0.7), 0.12);
+        return Model(d, vec3(offset.x, offset.y, offset.z), 0.12);
       }
 
       // Plane with normal n (n is normalized) at some distance from the origin
@@ -200,12 +199,12 @@
           if (planeModel.dist < boxModel.dist) {
             // normal = vec3(0, 1, 0);
             float test = abs(pos.x - 4.7);
-            pModInterval1(test, 8.0, 0.0, 50.0);
+            pModInterval1(test, 8.0, 0.0, 500.0);
             test = step(3.3, test);
             test = 1.0 - test;
 
             float test2 = abs(pos.z);
-            pModInterval1(test2, 8.0, 0.0, 50.0);
+            pModInterval1(test2, 8.0, 0.0, 500.0);
             test2 = step(3.3, test2);
             test2 = 1.0 - test2;
             float intensity = test*test2;
@@ -346,6 +345,9 @@
       var clock = new THREE.Clock();
       var texture;
       var gl;
+      var ROW_SIZE = 32;
+      var COL_SIZE = 32;
+      var grid = [];
 
       init();
       render();
@@ -365,21 +367,11 @@
 
 
         var theOffsets = new Float32Array(4096);
-        for (var i = 0; i < 4096; i+=4) {
-          theOffsets[i] = 0;
-          theOffsets[i+1] = 0;
-          theOffsets[i+2] = 0;
-          theOffsets[i+3] = 0;
-        }
-
         texture = textureFromFloats(gl, 32, 32, theOffsets);
         texture.needsUpdate = true;
 
-        console.log(texture);
-
-        // camera.position.set(new THREE.Vector3(0, 100, 2));
-        // camera.target.position(new THREE.Vector3(0, 2, 0.0001));
-        // camera.updateMatrix();
+        initGrid();
+        updateDataTextureFromGrid(grid);
 
         material = new THREE.RawShaderMaterial( {
           uniforms: {
@@ -410,8 +402,33 @@
 
       function textureFromFloats(gl,width,height,float32Array) 
       {
-
         return new THREE.DataTexture(float32Array, width, height, THREE.RGBA, THREE.FloatType, THREE.UVMapping, THREE.RepeatWrapping, THREE.RepeatWrapping, THREE.NearestFilter, THREE.NearestFilter, 1);
+      }
+
+      function initGrid() {
+        for (var i = 0; i < COL_SIZE; i++) {
+          var row = [];
+
+          for (var j = 0; j < ROW_SIZE; j++) {
+            var val = Math.round(Math.random());
+            row[j] = [val, val, val, val];
+          }
+
+          grid[i] = row;
+        }
+      }
+
+      function updateDataTextureFromGrid(grid) {
+        var vectorCount = texture.image.data.length / 4;
+        for (var i = 0; i < texture.image.data.length; i+=4) {
+          var row = Math.floor(i/4 / ROW_SIZE);
+          var col = i/4 % ROW_SIZE;
+          texture.image.data[i] = grid[row][col][0];
+          texture.image.data[i+1] = grid[row][col][1];
+          texture.image.data[i+2] = grid[row][col][2];
+          texture.image.data[i+3] = grid[row][col][3];
+        }
+        texture.needsUpdate = true;
       }
 
       function render( timestamp ) {
@@ -423,10 +440,7 @@
         material.uniforms.cameraPos.value = camera.getWorldPosition();
         material.uniforms.cameraDir.value = camera.getWorldDirection();
 
-        for (var i = 0; i < texture.image.data.length; i+=4) {
-          texture.image.data[i] += Math.random()/(i/80);
-        }
-        texture.needsUpdate = true;
+        updateDataTextureFromGrid(grid);
 
         renderer.render( scene, dummyCamera );
         stats.end();
