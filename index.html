@@ -5,21 +5,18 @@
       uniform vec2 iResolution;
       uniform vec3 cameraPos;
       uniform vec3 cameraDir;
-      const float row_size = 64.0;
-      const float col_size = 64.0;
+      const float row_size = 128.0;
+      const float col_size = 128.0;
       const float EPS = 0.01;
       const float OFFSET = EPS * 100.0;
-      const float bevel = 1.1;
+      const float bevel = 0.8;
       const vec3 lightDir = vec3( -0.48666426339228763, 0.8111071056538127, -0.3244428422615251 );
-      const vec3 box = vec3(1.7, 1, 1.7);
+      const vec3 box = vec3(3., 0.75, 3.);
       const float CELL_WIDTH = 10.0;
       uniform sampler2D tex;
 
-
-
       const vec3 FACE_COLOR = vec3(.9,.9,1.);
-      const vec3 BACK_COLOR = vec3(.1,.1,.15);
-      const vec3 BACKGROUND_COLOR = vec3(.0, .005, .03);
+      const vec3 BACKGROUND_COLOR = vec3(.01, .02, .05);
 
       struct Model {
         float dist;
@@ -28,7 +25,7 @@
       };
 
       vec3 doLighting(Model model, vec3 pos, vec3 nor, vec3 ref, vec3 rd) {
-        vec3 lightPos = normalize(vec3(-1, 20, 10));
+        vec3 lightPos = normalize(vec3(0, 4, 1));
         vec3 backLightPos = normalize(vec3(5,3,1));
         vec3 ambientPos = vec3(0,1,0);
         
@@ -39,10 +36,10 @@
         float fre = pow( clamp(1.0+dot(nor,rd),0.0,1.0), 2.0 );
         
         vec3 lin = vec3(0.0);
-        lin += 1.20 * dif * vec3(.9);
-        lin += 0.80 * amb * vec3(.5, .7, .8);
-        lin += 0.30 * bac * vec3(.25);
-        lin += 0.20 * fre * vec3(1);
+        lin += 1.60 * dif * vec3(.9);
+        lin += 0.20 * amb * vec3(.3, .5, .7);
+        // lin += 0.30 * bac * vec3(.25);
+        lin += 0.50 * fre * vec3(1);
         
         vec3 albedo = model.albedo;
         vec3 col = mix(albedo * lin, albedo, model.glow);    
@@ -56,7 +53,7 @@
       // Adapted from cabbibo https://www.shadertoy.com/view/Xl2XWt
       // --------------------------------------------------------
 
-      const float MAX_TRACE_DISTANCE = 1200.; // max trace distance
+      const float MAX_TRACE_DISTANCE = 20000.; // max trace distance
       const float INTERSECTION_PRECISION = .001; // precision of the intersection
       const int NUM_OF_TRACE_STEPS = 100;
       const float FUDGE_FACTOR = .9; // Default is 1, reduce to fix overshoots
@@ -106,8 +103,7 @@
 
       Model roundBox( vec3 p, vec3 dimensions, float radius )
       {
-        vec3 pC = vec3(p.x, p.y, p.z);
-        vec2 index = pMod2(pC.xz, vec2(CELL_WIDTH, CELL_WIDTH));
+        vec2 index = pMod2(p.xz, vec2(CELL_WIDTH, CELL_WIDTH));
 
         float r = 0.3;
 
@@ -119,11 +115,14 @@
 
         vec4 offset = texture2D(tex, index);
 
-        pC.y += (1.0-offset.y)*4.0;
-        pMod2(pC.xz, vec2(CELL_WIDTH, CELL_WIDTH));
-        float d = length(max(abs(pC)-dimensions,0.0))-radius;
+        p.y += (1.0-offset.y)*4.0;
+        dimensions.xz *= offset.y;
+        radius *= offset.y;
 
-        return Model(d, vec3(0.45, 0.45, 0.45), 0.12);
+        pMod2(p.xz, vec2(CELL_WIDTH, CELL_WIDTH));
+        float d = length(max(abs(p)-dimensions,0.0))-radius;
+
+        return Model(d, vec3(0.35, 0.35, 0.35), 0.0);
       }
 
       // Plane with normal n (n is normalized) at some distance from the origin
@@ -178,14 +177,14 @@
           }
           vec3 rayVec = ray.origin + ray.direction * ray.len;
           boxModel = roundBox(rayVec, box, bevel);
-          planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.15, 0.15, 0.15), 0.0);
+          planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.4, 0.5, 0.6), 0.12);
 
           model = boxModel;
           if (planeModel.dist < boxModel.dist) {
             model = planeModel;
           }
 
-          currentDist = fOpUnionSoft(boxModel.dist, planeModel.dist, 1.5);
+          currentDist = fOpUnionSoft(boxModel.dist, planeModel.dist, 0.01);
           ray.len += currentDist * FUDGE_FACTOR;
         }
         
@@ -199,21 +198,22 @@
         } else {
           pos = ray.origin + ray.direction * ray.len;
           normal = calcNormal(pos);
-          if (planeModel.dist < boxModel.dist) {
+          if (planeModel.dist <= boxModel.dist) {
             // normal = vec3(0, 1, 0);
             float test = abs(pos.x);
-            pModInterval1(test, CELL_WIDTH, 0.0, 500.0);
+            pModInterval1(test, CELL_WIDTH, 0.0, 50000.0);
             test = step(4.0, test);
             test = 1.0 - test;
 
             float test2 = abs(pos.z);
-            pModInterval1(test2, CELL_WIDTH, 0.0, 500.0);
+            pModInterval1(test2, CELL_WIDTH, 0.0, 50000.0);
             test2 = step(4.0, test2);
             test2 = 1.0 - test2;
-            float intensity = test*test2+0.3;
+            float intensity = test*test2/2.;
+            // intensity = 1.0;
             model.albedo.x = intensity*0.1;
-            model.albedo.y = intensity*0.1;
-            model.albedo.z = intensity*0.1;
+            model.albedo.y = intensity*0.2;
+            model.albedo.z = intensity*0.3;
           }
         }
 
@@ -294,10 +294,7 @@
           Hit hit = raymarch(CastRay(cPos, rd));
 
           vec3 color = render(hit);
-          
-          #ifndef DEBUG
-              color = linearToScreen(color);
-          #endif
+          color = linearToScreen(color);
 
           gl_FragColor = vec4(color,1.0);
       }
@@ -348,8 +345,8 @@
       var clock = new THREE.Clock();
       var texture;
       var gl;
-      var ROW_SIZE = 64;
-      var COL_SIZE = 64;
+      var ROW_SIZE = 1024;
+      var COL_SIZE = 256;
       var grid = [];
 
       init();
@@ -359,7 +356,7 @@
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera();
         dummyCamera = new THREE.Camera();
-        camera.position.set(0, 180, 0);
+        camera.position.set(0, 174.1, 0);
         camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
         geometry = new THREE.PlaneBufferGeometry( 2.0, 2.0 );
         renderer = new THREE.WebGLRenderer();
@@ -414,7 +411,7 @@
 
           for (var j = 0; j < ROW_SIZE; j++) {
             var val = Math.random();
-            if (val < .9) {
+            if (val < .7) {
               val = 1;
             } else {
               val = 0;
@@ -514,7 +511,7 @@
       }
 
       var timeSinceUpdate = 0;
-      var stepTime = 1000;
+      var stepTime = 1500;
 
       function render( timestamp ) {
         var delta = clock.getDelta();
