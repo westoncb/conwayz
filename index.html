@@ -350,9 +350,12 @@
       var ROW_SIZE = 128;
       var COL_SIZE = 128;
       var grid = [];
+      var toggledCells = [];
+      var timeSinceGameUpdate = 0;
+      var stepTime = 1000;
 
       init();
-      render();
+      update();
 
       function init() {
         scene = new THREE.Scene();
@@ -418,6 +421,8 @@
             } else {
               val = 0;
             }
+
+            //Each cell in the grid holds an arry of data.
             row[j] = [val,val,0,0];
           }
 
@@ -425,10 +430,8 @@
         }
       }
 
-      var cellsToToggle = [];
-
       function stepConwaysGame(grid) {
-        cellsToToggle.length = 0;
+        toggledCells.length = 0;
 
         for (var i = 0; i < COL_SIZE; i++) {
           for (var j = 0; j < ROW_SIZE; j++) {
@@ -439,16 +442,19 @@
 
             var newState = newCellState(alive, neighborCount);
             
+            //We don't immediately toggle cells because it would effect the application
+            //of rules to other cells during this step of the game.
             if (newState !== oldState) {
-              cellsToToggle.push(i);
-              cellsToToggle.push(j);
+              toggledCells.push(i);
+              toggledCells.push(j);
             }
           }
         }
 
-        for (i = 0; i < cellsToToggle.length; i+=2) {
-          var row = cellsToToggle[i];
-          var col = cellsToToggle[i+1];
+        //Actually toggle any cells that should be toggled now
+        for (i = 0; i < toggledCells.length; i+=2) {
+          var row = toggledCells[i];
+          var col = toggledCells[i+1];
           var cell = grid[row][col];
 
           if (cell[0] === 1) {
@@ -502,8 +508,11 @@
       function updateDataTextureFromGrid(grid) {
         var vectorCount = texture.image.data.length / 4;
         for (var i = 0; i < texture.image.data.length; i+=4) {
-          var row = Math.floor(i/4 / ROW_SIZE);
-          var col = i/4 % ROW_SIZE;
+
+          //Each cell in the grid has four floats of data in the texture
+          var cellIndex = i/4;
+          var row = Math.floor(cellIndex / ROW_SIZE);
+          var col = cellIndex % ROW_SIZE;
           texture.image.data[i] = grid[row][col][0];
           texture.image.data[i+1] = grid[row][col][1];
           texture.image.data[i+2] = grid[row][col][2];
@@ -512,43 +521,51 @@
         texture.needsUpdate = true;
       }
 
-      var timeSinceUpdate = 0;
-      var stepTime = 1000;
-
-      function render( timestamp ) {
-        var delta = clock.getDelta();
-
-        timeSinceUpdate += delta*1000;
-
-        if (timeSinceUpdate > stepTime) {
-          stepConwaysGame(grid);
-          timeSinceUpdate -= stepTime;
-          updateDataTextureFromGrid(grid);
-        }
-
-        if (cellsToToggle !== undefined) {
-          for (var i = 0; i < cellsToToggle.length; i+= 2) {
-            var row = cellsToToggle[i];
-            var col = cellsToToggle[i+1];
-
-            var target = grid[row][col][0];
-            var initial = target === 1 ? 0 : 1;
-            var completionRatio = (timeSinceUpdate / stepTime);
-            grid[row][col][1] = initial + (target - initial)*completionRatio;
-          }
-          updateDataTextureFromGrid(grid);
-        }
-
+      function update(timestamp) {
         stats.begin();
+
+        var delta = clock.getDelta();
+        var deltaMillis = delta*1000;
+        
+        updateGame(deltaMillis);
+        
+
         controls.update( delta );
         if ( camera.position.y < 0 ) camera.position.y = 0;
         material.uniforms.iResolution.value = new THREE.Vector2( canvas.width, canvas.height );
         material.uniforms.cameraPos.value = camera.getWorldPosition();
         material.uniforms.cameraDir.value = camera.getWorldDirection();
 
+        render (delta)
+      }
+
+      function updateGame(deltaMillis) {
+        timeSinceGameUpdate += deltaMillis;
+
+        if (timeSinceGameUpdate > stepTime) {
+          stepConwaysGame(grid);
+          timeSinceGameUpdate -= stepTime;
+          updateDataTextureFromGrid(grid);
+        }
+
+        if (toggledCells !== undefined) {
+          for (var i = 0; i < toggledCells.length; i+= 2) {
+            var row = toggledCells[i];
+            var col = toggledCells[i+1];
+
+            var target = grid[row][col][0];
+            var initial = target === 1 ? 0 : 1;
+            var completionRatio = (timeSinceGameUpdate / stepTime);
+            grid[row][col][1] = initial + (target - initial)*completionRatio;
+          }
+          updateDataTextureFromGrid(grid);
+        }
+      }
+
+      function render(delta) {
         renderer.render( scene, dummyCamera );
         stats.end();
-        requestAnimationFrame( render );
+        requestAnimationFrame( update );
       }
 
       function onMouseMove( e ) {
