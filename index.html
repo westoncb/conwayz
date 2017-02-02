@@ -5,6 +5,7 @@
       uniform vec2 iResolution;
       uniform vec3 cameraPos;
       uniform vec3 cameraDir;
+      uniform float stepCompletion;
       const float row_size = 128.0;
       const float col_size = 128.0;
       const float EPS = 0.01;
@@ -14,6 +15,8 @@
       const vec3 box = vec3(3., 0.75, 3.);
       const float CELL_WIDTH = 10.0;
       uniform sampler2D tex;
+      bool cellDying = false;
+      bool cellBorn = false;
 
       const vec3 FACE_COLOR = vec3(.9,.9,1.);
       const vec3 BACKGROUND_COLOR = vec3(.01, .02, .05);
@@ -36,7 +39,17 @@
         float fre = pow( clamp(1.0+dot(nor,rd),0.0,1.0), 2.0 );
         
         vec3 lin = vec3(0.0);
-        lin += 1.60 * dif * vec3(.9);
+
+        if (cellDying) {
+          float greenAndBlue = .9 - min(stepCompletion*.9, .9);
+          lin += 1.60 * dif * vec3(greenAndBlue, greenAndBlue, greenAndBlue);
+        } else if (cellBorn) {
+          float redAndBlue = stepCompletion*.9;
+          lin += 1.60 * dif * vec3(redAndBlue, 1., redAndBlue);
+        } else {
+          lin += 1.60 * dif * vec3(.9);
+        }
+
         lin += 0.20 * amb * vec3(.3, .5, .7);
         // lin += 0.30 * bac * vec3(.25);
         lin += 0.50 * fre * vec3(1);
@@ -113,18 +126,32 @@
         index.x /= row_size;
         index.y /= col_size;
 
-        vec4 offset = texture2D(tex, index);
+        vec4 cellData = texture2D(tex, index);
 
-        // p.y += (1.0-offset.y)*2.0;
-        dimensions.xz *= offset.y;
-        radius *= offset.y;
+        cellDying = cellData.z == 1. && cellData.x == 0.;
+        cellBorn = cellData.z == 1. && cellData.x == 1.;
+
+        // p.y += (1.0-cellData.y)*2.0;
+        float shrinkFactor = cellData.y;
+        dimensions.xyz *= shrinkFactor;
+        radius *= shrinkFactor;
 
         dimensions.xz = step(0.1, dimensions.xz)*dimensions.x;
 
         pMod2(p.xz, vec2(CELL_WIDTH, CELL_WIDTH));
         float d = length(max(abs(p)-dimensions,0.0))-radius;
 
-        return Model(d, vec3(0.35, 0.35, 0.35), 0.0);
+        vec3 albedo = vec3(0.35, 0.35, 0.35);
+
+        if (cellBorn) {
+          float redAndBlue = stepCompletion*.35;
+          albedo = vec3(redAndBlue, 0.35, redAndBlue);
+        } else if (cellDying) {
+          float color = .35 - min(stepCompletion*.35, .35);
+          albedo = vec3(color, color, color);
+        }
+
+        return Model(d, albedo, 0.0);
       }
 
       // Plane with normal n (n is normalized) at some distance from the origin
@@ -177,6 +204,7 @@
           if (currentDist < INTERSECTION_PRECISION || ray.len > MAX_TRACE_DISTANCE) {
               break;
           }
+
           vec3 rayVec = ray.origin + ray.direction * ray.len;
           boxModel = roundBox(rayVec, box, bevel);
           planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.4, 0.5, 0.6), 0.12);
@@ -200,6 +228,7 @@
         } else {
           pos = ray.origin + ray.direction * ray.len;
           normal = calcNormal(pos);
+
           if (planeModel.dist <= boxModel.dist) {
             // normal = vec3(0, 1, 0);
             float test = abs(pos.x);
@@ -213,9 +242,9 @@
             test2 = 1.0 - test2;
             float intensity = test*test2/2.;
             // intensity = 1.0;
-            model.albedo.x = intensity*0.1;
-            model.albedo.y = intensity*0.2;
-            model.albedo.z = intensity*0.3;
+            model.albedo.x = intensity*0.2;
+            model.albedo.y = intensity*0.3;
+            model.albedo.z = intensity*0.5;
           }
         }
 
@@ -353,6 +382,7 @@
       var toggledCells = [];
       var timeSinceGameUpdate = 0;
       var stepTime = 1000;
+      var stepCompletion = 0;
 
       init();
       update();
@@ -384,7 +414,8 @@
             cameraPos:  { value: camera.getWorldPosition() },
             cameraDir:  { value: camera.getWorldDirection() },
             offsets: {type: "fv", value: theOffsets},
-            tex: {type: "t", value: texture}
+            tex: {type: "t", value: texture},
+            stepCompletion: {value: stepCompletion}
           },
           vertexShader: document.getElementById( 'vertex_shader' ).textContent,
           fragmentShader: document.getElementById( 'fragment_shader' ).textContent
@@ -431,6 +462,7 @@
       }
 
       function stepConwaysGame(grid) {
+        clearRecentlyToggledIndicators();
         toggledCells.length = 0;
 
         for (var i = 0; i < COL_SIZE; i++) {
@@ -521,6 +553,15 @@
         texture.needsUpdate = true;
       }
 
+      function clearRecentlyToggledIndicators() {
+        for (var i = 0; i < toggledCells.length; i+= 2) {
+          var row = toggledCells[i];
+          var col = toggledCells[i+1];
+
+          grid[row][col][2] = 0;
+        }
+      }
+
       function update(timestamp) {
         stats.begin();
 
@@ -535,6 +576,7 @@
         material.uniforms.iResolution.value = new THREE.Vector2( canvas.width, canvas.height );
         material.uniforms.cameraPos.value = camera.getWorldPosition();
         material.uniforms.cameraDir.value = camera.getWorldDirection();
+        material.uniforms.stepCompletion.value = stepCompletion;
 
         render (delta)
       }
@@ -542,10 +584,13 @@
       function updateGame(deltaMillis) {
         timeSinceGameUpdate += deltaMillis;
 
+        stepCompletion = timeSinceGameUpdate / stepTime;
+
+        updateDataTextureFromGrid(grid);
+
         if (timeSinceGameUpdate > stepTime) {
           stepConwaysGame(grid);
-          timeSinceGameUpdate -= stepTime;
-          updateDataTextureFromGrid(grid);
+          timeSinceGameUpdate = 0;
         }
 
         if (toggledCells !== undefined) {
@@ -557,8 +602,9 @@
             var initial = target === 1 ? 0 : 1;
             var completionRatio = (timeSinceGameUpdate / stepTime);
             grid[row][col][1] = initial + (target - initial)*completionRatio;
+
+            grid[row][col][2] = 1;
           }
-          updateDataTextureFromGrid(grid);
         }
       }
 
