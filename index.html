@@ -115,9 +115,11 @@
 
         vec4 offset = texture2D(tex, index);
 
-        p.y += (1.0-offset.y)*4.0;
+        // p.y += (1.0-offset.y)*2.0;
         dimensions.xz *= offset.y;
         radius *= offset.y;
+
+        dimensions.xz = step(0.1, dimensions.xz)*dimensions.x;
 
         pMod2(p.xz, vec2(CELL_WIDTH, CELL_WIDTH));
         float d = length(max(abs(p)-dimensions,0.0))-radius;
@@ -345,8 +347,8 @@
       var clock = new THREE.Clock();
       var texture;
       var gl;
-      var ROW_SIZE = 1024;
-      var COL_SIZE = 256;
+      var ROW_SIZE = 128;
+      var COL_SIZE = 128;
       var grid = [];
 
       init();
@@ -511,7 +513,7 @@
       }
 
       var timeSinceUpdate = 0;
-      var stepTime = 1500;
+      var stepTime = 1000;
 
       function render( timestamp ) {
         var delta = clock.getDelta();
