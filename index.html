@@ -28,7 +28,7 @@
       };
 
       vec3 doLighting(Model model, vec3 pos, vec3 nor, vec3 ref, vec3 rd) {
-        vec3 lightPos = normalize(vec3(0, 4, 1));
+        vec3 lightPos = normalize(vec3(0, 10, 5));
         vec3 backLightPos = normalize(vec3(5,3,1));
         vec3 ambientPos = vec3(0,1,0);
         
@@ -52,7 +52,7 @@
 
         lin += 0.20 * amb * vec3(.3, .5, .7);
         // lin += 0.30 * bac * vec3(.25);
-        lin += 0.50 * fre * vec3(1);
+        lin += 0.20 * fre * vec3(1);
         
         vec3 albedo = model.albedo;
         vec3 col = mix(albedo * lin, albedo, model.glow);    
@@ -151,7 +151,7 @@
           albedo = vec3(color, color, color);
         }
 
-        return Model(d, albedo, 0.0);
+        return Model(d, albedo, .1);
       }
 
       // Plane with normal n (n is normalized) at some distance from the origin
@@ -562,8 +562,8 @@
         }
       }
 
-      function sinEase(t) {
-        return -1/2 * (Math.cos(Math.PI*t) - 1);
+      function sinEase(t, start, end) {
+        return -(end-start)/2 * (Math.cos(Math.PI*t) - 1) + start;
       }
 
       function update(timestamp) {
@@ -588,7 +588,7 @@
       function updateGame(deltaMillis) {
         timeSinceGameUpdate += deltaMillis;
 
-        stepCompletion = sinEase(timeSinceGameUpdate / stepTime);
+        stepCompletion = sinEase(timeSinceGameUpdate / stepTime, 0, 1);
 
         updateDataTextureFromGrid(grid);
 
