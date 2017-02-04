@@ -126,7 +126,8 @@
         index.x /= row_size;
         index.y /= col_size;
 
-        index -= 0.25;
+        //In order to center the grid in our viewport
+        index -= 0.5;
 
         vec4 cellData = texture2D(tex, index);
 
@@ -405,7 +406,7 @@
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera();
         dummyCamera = new THREE.Camera();
-        camera.position.set(0, 174.1, 0);
+        camera.position.set(0, 291.5, 0);
         camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
         geometry = new THREE.PlaneBufferGeometry( 2.0, 2.0 );
         renderer = new THREE.WebGLRenderer();
@@ -681,8 +682,8 @@
         var configWidth = dimensions[0];
         var configHeight = dimensions[1];
 
-        var xOffset = ROW_SIZE - configWidth;
-        var yOffset = COL_SIZE - configHeight;
+        var xOffset = Math.floor((ROW_SIZE - configWidth)/2);
+        var yOffset = Math.floor((COL_SIZE - configHeight)/2);
 
         for (var i = 0; i < COL_SIZE; i++) {
           var row = [];
