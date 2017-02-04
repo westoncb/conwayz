@@ -357,7 +357,13 @@
     <script src="lib/OrbitControls.js"></script>
 
     <script src="lib/stats.min.js"></script>
+    <script src="lib/jquery-2.2.1.min.js"></script>
 
+    <!-- Boostrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
 
     <script id="vertex_shader" type="x-shader/x-vertex">
@@ -366,6 +372,8 @@
         gl_Position = vec4(position, 1.0);
       }
     </script>
+
+    <div class="dropdown-container"></div>
 
     <script>
       var camera, dummyCamera, scene, controls, renderer;
@@ -383,11 +391,15 @@
       var timeSinceGameUpdate = 0;
       var stepTime = 1000;
       var stepCompletion = 0;
+      var configFileList = [];
 
       init();
       update();
 
       function init() {
+        setupConfigFileList();
+
+
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera();
         dummyCamera = new THREE.Camera();
@@ -433,7 +445,7 @@
         controls.enableZoom = true;
         controls.movementSpeed = 50;
         stats = new Stats();
-        document.body.appendChild( stats.dom );
+        // document.body.appendChild( stats.dom );
       }
 
       function textureFromFloats(gl,width,height,float32Array) 
@@ -610,6 +622,65 @@
             grid[row][col][2] = 1;
           }
         }
+      }
+
+      function setupConfigFileList() {
+        $.ajax({
+          //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+          url: './test',
+          success: function (data) {
+            $(data).find("a:contains(" + ".l" + ")").each(function() {
+                configFileList.push($(this).attr('href'));
+            });
+
+            var dropdownContainer = $('.dropdown-container');
+            var dropdown = $('<div class="dropdown"></div>');
+            var menu = $('<ul class="dropdown-menu"></ul>');
+            var index = 0;
+            configFileList.forEach(function(fileName) {
+              menu.append('<li><a href="#" class="menu-item" id='+ index +'>' + fileName + '</a></li>');
+              index++;
+            });
+
+            dropdown.append('<button class="btn btn-primary dropdown-toggle" type="button" data-' +
+              'toggle="dropdown">Configurations <span class="caret"></span></button>');
+            dropdown.append(menu);
+            dropdownContainer.append(dropdown);
+
+            $('.menu-item').click(function(e) {
+              var index = Number(e.target.id);
+              readTextFile(configFileList[index], loadNewConwaysConfig);
+            });
+          }
+        });
+      }
+
+      function loadNewConwaysConfig(text) {
+        var result = parseConwaysConfig(text);
+      }
+
+      //This is for 'dbLife (*.L)' files, as described here: http://psoup.math.wisc.edu/mcell/ca_files_formats.html
+      function parseConwaysConfig(text) {
+
+      }
+
+      function readTextFile(file, completion)
+      {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", file, true);
+        rawFile.onreadystatechange = function ()
+        {
+          if(rawFile.readyState === 4)
+          {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+              var allText = rawFile.responseText;
+
+              completion(allText);
+            }
+          }
+        }
+        rawFile.send(null);
       }
 
       function render(delta) {

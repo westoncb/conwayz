@@ -1,0 +1,25 @@
+#C A period 3 c/3 convoy which turns a foward glider into a backward glider.
+#C The output glider travels back through the same columns.
+#C This is an improvement on a previous version of this convoy.
+#C David I. Bell, October 2002
+x = 110, y = 76
+29bo$27b4o$26boo3bo$25bo5b3o$28bobo4boo$25bob4o4boo$24b8ob4o$24boo$29b
+o5boo$28bobo3bobbo$31bobobbo14b3o$29b4o18bo$29b4o19bo$31bobbo3$23bo$
+22boboboo$21bo4boo26bo3b3oboo8boo3b3o14b3o6bo$18boboo3bobbo24b4obo3boo
+5booboo3b3o4b3o8boboo3boo$17booboobo28bo3bobob4o5boobobobo3bobbo3boo3b
+oobobo3bobo$16bobb6o19boo5boobobobobbo3bobbobobboobo6bobobo3bobooboobo
+bobbo$12boo9bobbo16bobboobbooboobo4boobbooboboobobbo4bobobboobobo6boob
+oboob3o$boob3o4boobo3bo3bo3bo15bo3bob3obo8bob3obbobobb6obooboo3boobo4b
+obbooboobo3bo$boo4boobboob3oboobbobboo16b4o3bo5b4obo3bobbobobo3bo6bobb
+obobo6bo9boo$obbobo3boboo5boo3bobbo13boobboo4bobo7boobb3o7b3o5bobo14b
+oo$7b3o5boo5bo17boo4bobbo4bobo4boob3o10bo$9b3obo28b4o6bo3bo4bobobobbo$
+9boo27bobbobbo3boobo$39boboo5bo22boo$43bo3bo4bo5boo9booboboo$46b3oboob
+oobobboob3oboo4bobb4o$44boo3bobobobo4b3oboboo6bo4bo$48bob4obobbobo3bob
+obbo7boo$boob3o42boo11bo$boo4boo$obbobo3bo$7b3obb3o$9b3obobo$9bo4bo$
+10boo$$10boo$9bobbo$9bobbo$8boobo$9boboboo$6boobobo$6boobobobo$7bobobo
+bbo$8bobbo3boo$7b5obb3o$8b3oboboo$12bo$12bo$$45boo$44boboo$44boboo$40b
+o3boob3o$36b3ob3obbo4bo3bo$35bo5boobb3o4b4o$36bobboboo9bo3bo$39bo4boo
+4bobbobo$37b3obo9bo$35bo3bo16bo$35bobbobo3bo6bobb3o$34boo6b3ob3obobo4b
+5o4boo$34booboo3bobboo3bobo4bobb3o3booboo$34bo12boo3bobob5o4bo3boo$35b
+obboboobbo12boo3bobbobbobo$37bobboobboo16b4obo$42boobo$40bo$41b4o$42b
+oo!
