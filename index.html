@@ -339,7 +339,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style type="text/css">
       body {
-        background-color: black;
+        background-color: black !important;
         margin: 0;
         padding: 0;
       }
@@ -351,6 +351,11 @@
         right: 0;
         bottom: 0;
         margin: auto;
+      }
+      .btn-primary {
+        background-color: #47b733 !important;
+        border-color: #36a622 !important;
+        color: #444 !important;
       }
     </style>
   </head>
@@ -442,11 +447,7 @@
         window.addEventListener( 'resize', onWindowResize );
         document.body.appendChild( canvas );
         controls = new THREE.OrbitControls( camera, canvas );
-        controls.autoForward = false;
-        controls.dragToLook = true;
-        controls.rollSpeed = Math.PI / 22;
         controls.enableZoom = true;
-        controls.movementSpeed = 50;
         stats = new Stats();
         // document.body.appendChild( stats.dom );
       }
@@ -457,10 +458,14 @@
       }
 
       function initGrid() {
-        for (var i = 0; i < COL_SIZE; i++) {
-          var row = [];
+        var configGrid = [];
 
+        //Fill the config grid with random live and dead cells
+        for (var i = 0; i < COL_SIZE; i++) {
+
+          var row = [];
           for (var j = 0; j < ROW_SIZE; j++) {
+
             var val = Math.random();
             if (val < .61803) {
               val = 1;
@@ -468,12 +473,13 @@
               val = 0;
             }
 
-            //Each cell in the grid holds an arry of data.
-            row[j] = [val,val,0,0];
+            row[j] = val;
           }
 
-          grid[i] = row;
+          configGrid[i] = row;
         }
+
+        copyConfigGridIntoGrid(ROW_SIZE, COL_SIZE, configGrid, grid);
       }
 
       function stepConwaysGame(grid) {
@@ -617,14 +623,14 @@
       function updateGame(deltaMillis) {
         timeSinceGameUpdate += deltaMillis;
 
-        stepCompletion = sinEase(timeSinceGameUpdate / stepTime, 0, 1);
-
-        updateDataTextureFromGrid(grid);
-
         if (timeSinceGameUpdate > stepTime) {
           stepConwaysGame(grid);
           timeSinceGameUpdate = 0;
         }
+
+        stepCompletion = sinEase(timeSinceGameUpdate / stepTime, 0, 1);
+
+        updateDataTextureFromGrid(grid);
 
         if (toggledCells !== undefined) {
           for (var i = 0; i < toggledCells.length; i+= 2) {
@@ -634,7 +640,7 @@
             var target = grid[row][col][0];
             var initial = target === 1 ? 0 : 1;
             var completionRatio = (timeSinceGameUpdate / stepTime);
-            grid[row][col][1] = initial + (target - initial)*completionRatio;
+            grid[row][col][1] = initial + (target - initial)*stepCompletion;
 
             grid[row][col][2] = 1;
           }
@@ -683,6 +689,10 @@
         var configWidth = dimensions[0];
         var configHeight = dimensions[1];
 
+        copyConfigGridIntoGrid(configWidth, configHeight, configGrid, grid);
+      }
+
+      function copyConfigGridIntoGrid(configWidth, configHeight, configGrid, grid) {
         //Used to center the config grid over our grid (since they may be different sizes)
         var xOffset = Math.floor((ROW_SIZE - configWidth)/2);
         var yOffset = Math.floor((COL_SIZE - configHeight)/2);
