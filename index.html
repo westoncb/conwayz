@@ -6,8 +6,8 @@
       uniform vec3 cameraPos;
       uniform vec3 cameraDir;
       uniform float stepCompletion;
-      const float row_size = 128.0;
-      const float col_size = 128.0;
+      const float row_size = 256.0;
+      const float col_size = 256.0;
       const float EPS = 0.01;
       const float OFFSET = EPS * 100.0;
       const float bevel = 0.8;
@@ -125,6 +125,8 @@
 
         index.x /= row_size;
         index.y /= col_size;
+
+        index -= 0.25;
 
         vec4 cellData = texture2D(tex, index);
 
@@ -384,8 +386,8 @@
       var clock = new THREE.Clock();
       var texture;
       var gl;
-      var ROW_SIZE = 128;
-      var COL_SIZE = 128;
+      var ROW_SIZE = 256;
+      var COL_SIZE = 256;
       var grid = [];
       var toggledCells = [];
       var timeSinceGameUpdate = 0;
@@ -496,7 +498,7 @@
         }
 
         //Actually toggle any cells that should be toggled now
-        for (i = 0; i < toggledCells.length; i+=2) {
+        for (var i = 0; i < toggledCells.length; i+=2) {
           var row = toggledCells[i];
           var col = toggledCells[i+1];
           var cell = grid[row][col];
@@ -507,9 +509,6 @@
             newState = 1;
           }
           cell[0] = newState;
-          cell[1] = newState;
-          cell[2] = newState;
-          cell[3] = newState;
         }
       }
 
@@ -674,14 +673,48 @@
 
       function loadNewConwaysConfig(text) {
         var result = parseConwaysConfig(text);
+
         var comments = result[0];
         var dimensions = result[1];
-        var grid = result[2];
-        var width = dimensions[0];
-        var height = dimensions[1];
+        var configGrid = result[2];
 
-        var xOffset = ROW_SIZE - width;
-        var yOffset = COL_SIZE - height;
+        var configWidth = dimensions[0];
+        var configHeight = dimensions[1];
+
+        var xOffset = ROW_SIZE - configWidth;
+        var yOffset = COL_SIZE - configHeight;
+
+        for (var i = 0; i < COL_SIZE; i++) {
+          var row = [];
+
+          var configRowIndex = i - yOffset;
+          var configRow = null;
+
+          if (configRowIndex >= 0 && configRowIndex < configHeight) {
+            configRow = configGrid[configRowIndex];
+          }
+
+          for (var j = 0; j < ROW_SIZE; j++) {
+
+            var configIndex = j - xOffset;
+            var val = 0;
+
+            if (configRow != null && configIndex >= 0 && configIndex < configWidth) {
+              val = configRow[configIndex];
+            }
+
+            //Each cell in the grid holds an arry of data.
+            row[j] = [val,val,0,0];
+
+            // if (i >= 118 && i <= 138 && j >= 118 && j <= 138) {
+            //   row[j] = [1,1,0,0];              
+            // }
+          }
+
+          grid[i] = row;
+        }
+
+        updateDataTextureFromGrid(grid);
       }
 
       //This is for 'dbLife (*.L)' files, as described here: http://psoup.math.wisc.edu/mcell/ca_files_formats.html
