@@ -1,0 +1,59 @@
+#C A c/3 period 180 forward rake.
+#C This is produced by a one-sided impact of a period 90 glider stream into
+#C a period 21 frothing spaceship.  The period of the spaceship is modified
+#C by the impacts to be compatible with the glider stream.  Period 180
+#C c/3 rakes were previously known, but this one is much smaller.
+#C David I. Bell, October 2002
+x = 152, y = 265
+97bo$96b3o$77boboo14bo3bo14boobo$76boobooboobo10b3o10boboobooboo$75bo
+bbobobooboo8b5o8booboobobobbo$76bo6bo5bo4boo3boo4bo5bo6bo$84bo3b4obo7b
+ob4o3bo$88bo3b3obobob3o3bo$83boobobbo3boo5boo3bobboboo$82bo4bobbobobb
+ooboobbobobbo4bo$81boobobo6boo5boo6boboboo$79boobobo6booboboboboboo6bo
+boboo$77boobo9bo3bobbobbo3bo9boboo$76bo3bo9boboboo3boobobo9bo3bo$77bob
+o11bobobo3bobobo11bobo$94bobobobo$91bo11bo$89boobo3bobo3boboo$92bo4bo
+4bo$92bobooboboobo$91boobo5boboo$90bobobo5bobobo$89boobobob3oboboboo$
+92bobo5bobo$89booboboo3booboboo$68boboo24b3o24boobo$64b3obooboboo18b9o
+18booboboob3o$63bo6boobb4o15boo5boo15b4obboo6bo$64boo3bo3bo4bo12boo9b
+oo12bo4bo3bo3boo$76b3o5boo9bobobo9boo5b3o$82boboo5bobboo3boobbo5boobo$
+79boboo3boo19boo3boobo$78booboobobobo4bob5obo4bobobobooboo$78boobo4bob
+3ob11ob3obo4boboo$82boobo3bob13obo3boboo$89bo15bo$90bo13bo3$94boo3boo$
+80bo14bo3bo$79boob3o$77b3o5bo6boobb3obboo$74boo7boo7bo9bo$74boo4bo10bo
+bobobobobobo$74b3o4bo9bobo3bo3bobo$62bo5b3o5boo3boo7bobbo7bobbo$58b3ob
+3o6bobb3obboobboo$57bo6boo5boo6boob3o9bo5bo$58boo3bobbob4o3boobbooboo
+6bo3bo5bo3bo$90bo13bo$68bo21bo3bo5bo3bo$66bobo25bo5bo$91bobbo5bobbo$
+92b3o5b3o$92boob5oboo$94b3ob3o$105bobo$106bo$$94boo3boo4bo$94boo3boo3b
+obo$89bo$90boo$89boo3$94boo3boo$94boo3boo$$94boo3boo$94boo3boo4$93boo$
+92bobo$91bobo$91bobbo$92bobbo$92bob3o$93bo4bo$91b6obobboo$91bo3b3o$91b
+o3b3o4bo$97bo$87b3o3b3o3bo$$91bo$91bo$91bo5$119b3oboo$89bo3b3o9boo10b
+oo4boo$87bo3b3obo9boo9bo3bobobbo$87bo5boo5boo4bo4b3obb3o$91bo7bo4boo4b
+obob3o$90bo9boobobo5bo4bo$91boo7bo13boo$93bo8b3o$90bobbo8bo$90bo$88bo
+3bo$87bo3bo$62booboo21bobo$59boobooboboo20bo$56b4obb3obbob3o$55bo4bo5b
+3o4b3o$56boo8bob3obobobo$67b4obobobo$65bobbo4bobo5bo$66bo14boo$74bo4b
+5o17bo$74bo3boobbobo17bo$77boo4b3o15bo$78boboobbo$79bo3bo$98booboo$98b
+4o$99boo$60boob3o$60boo4boo27boo$59bobbobo3bo26b4o$66b3obb3o20bo4bo$
+42b3o9b3o11b3obobo18b4obbo$38boboo3bo7bo3boobo7bo4bo8boo9booboboo$37b
+3o3bobo7bobo3b3o7boo8booboo9boo$36bo3bo4boo5boo4bo3bo13b4obboo4boo5b3o
+$37bo7b3o3b3o7bo13bo4bo4booboo$43bobo7bobo20boo7boo3bo$42boo11boo28boo
+$41bo3bo7bo3bo$45bo7bo$42boboo7boobo$42bo13bo$42b3o9b3o$$43bo11bo$49bo
+$42boo4bobo4boo$47bo3bo$41bo6b3o6bo$42boo11boo$41bobobboo3boobbobo$46b
+oo3boo$41bobo3b5o3bobo$41bobbobbobobobbobbo$41bobb3o5b3obbo$49bo$49bo$
+43bo3bo3bo3bo$42booboo5booboo$46booboboo$42bo3b7o3bo$42bobo9bobo$42boo
+3b5o3boo$45bo3bo3bo$43bob3obob3obo$43boobo5boboo46boo$42bobobbo3bobbob
+o45boo17bo$42bo6bo6bo62b3ob3o$41bobbo3b3o3bobbo60boo6bo$41bob3o3bo3b3o
+bo55bo3bobbo3boo$43bobbo5bobbo56b4o$42b3obooboboob3o41b3o10bo3bo$41boo
+bobob3oboboboo40bo13bobobbo$40bo3bo4bo4bo3bo40bo16bo$40bobobo3bobo3bob
+obo64b3oboo$44bo3bobo3bo66boo4boo$41boo5bobo5boo62bo3bobobbo$42b5obobo
+b5o58b3obb3o$46bobobobo23boo31b3obbobob3o$46bobobobo23bobo30b7o4bo$45b
+ooboboboo22bo31boobobo4boo$46boo3boo56b4o$109b3o$110bo3$53b3o$53bo33b
+oob3o20b3oboo$54bo32boo4boo16boo4boo$86bobbobo3bo14bo3bobobbo$93b3obb
+3o4b3obb3o$25bo69b3obobobbobob3o$25boo68bo4bo4bo4bo$25boboo67boo10boo$
+23bobbo$22boo6b3oboo$16b3obboob3obboo3boo$15bobob3o4bo5b4o$16bo4bo4boo
+bbobo$19boo9bobbo$31bobboo$12bob3o16b4o$4bo6bo4boob3oboob3obboo3bo$bb
+4o4boobbob4oboboo4b6obo$boo3boboobb4obo3bobo3bobo5boo$o3bob4o9bo8b3ob
+5o$4bo22bobbo3bo$5bo4bo14booboo$9bo17bobb3o$27b4o10$55boo$55boo$33bo$
+32boboboo$31bo4boo$28boboo3bobbo$27booboobo$26bobb6o$22boo9bobbo22b3o$
+11boob3o4boobo3bo3bo3bo24bo$11boo4boobboob3oboobbobboo23bo$10bobbobo3b
+oboo5boo3bobbo$17b3o5boo5bo$19b3obo$19boo9$104b3o$106bo$105bo$$28b3o$
+24boboo3bo$23b3o3b3obb3o$22bo3bo4b3obobo$23bo7bo4bo$32boo6$149b3o$151b
+o$150bo3$41boboo22boobo$40boobooboo16boobooboo$39bobbobobbo16bobbobobb
+o$40bo5boo4boo4boo4boo5bo$49booboo4booboo$49boo3bobbo3boo$49boo10boo!

@@ -1,0 +1,41 @@
+#C A period 90 c/3 spaceship.
+#C This is composed of a period 45 puffer, some period 3 edge-spark
+#C spaceships, and some period 3 edge-repairing spaceships.
+#C This spaceship produces a large and accessible cloud of smoke.
+#C The smoke can be used to turn backwards gliders into other things
+#C such as forwards gliders.
+#C David I. Bell, August 1997
+x = 93, y = 147
+11b3o5b3o25b3o5b3o$10bo3booboo3bo11bo11bo3booboo3bo$10bobobbobobbobo
+10b3o10bobobbobobbobo$9boobboo3boobboo8bo3bo8boobboo3boobboo$8boobbobo
+3bobobboo8b3o8boobbobo3bobobboo$6boobo4bo3bo4boboo5b5o5boobo4bo3bo4bob
+oo$5bobo17bo5boo3boo5bo17bobo$bboobo3boo11boo3boobo7boboo3boo11boo3bob
+oo$bboobo23b3obobob3o23boboo$bbobo25boo5boo25bobo$27bobobbooboobbobo$
+30boo5boo$28booboboboboboo$27bo3bobbobbo3bo$27boboboo3boobobo$28bobobo
+3bobobo$31bobobobo$28bo11bo$26boobo3bobo3boboo$29bo4bo4bo$29bobooboboo
+bo$28boobo5boboo$27bobobo5bobobo$26boobobob3oboboboo$29bobo5bobo$26boo
+boboo3booboboo$5boboo24b3o24boobo$b3obooboboo18b9o18booboboob3o$o6boo
+bb4o15boo5boo15b4obboo6bo$boo3bo3bo4bo12boo9boo12bo4bo3bo3boo$13b3o5b
+oo9bobobo9boo5b3o$19boboo5bobboo3boobbo5boobo$16boboo3boo19boo3boobo$
+15booboobobobo4bob5obo4bobobobooboo$15boobo4bob3ob11ob3obo4boboo$19boo
+bo3bob13obo3boboo$26bo15bo$27bo13bo$$33b3o$29b4o3b4o$29bobb5obbo$30b9o
+21bo11b4o$30boo5boo14boo4b3obo8boboboobo$53boobooboboobo3b3obbo4b3o$
+52bo3bo4bo3boboboo6bo3bo$50bo4b3o4bob3obboo9boo$49boo3booboo7bobbobo8b
+oo$47boobboobobo3bo8boboboo5boboo$47b3oboobobbo4b3obboboboboo4booboboo
+$25boo15boo4booboobobobbobobb4obo4bo11bo$23bo21bo12bo6boo5bo3boobooboo
+bo$23b3o17b3o5bo13bo3b4o3bo$24bo6boo3boo6bo7boo12bo10boo$31boo3boo29bo
+$25bo17bo$24b3o15b3o$27bo13bo$25boboo11boobo$26boo13boo$29b3o5b3o$29bo
+bbo3bobbo$29boboo3boobo4$29bobobobobobo$29bobobobobobo$29bo9bo$30boo5b
+oo$29bobo5bobo$29bobbo3bobbo$30boo5boo$31bo5bo4$35boo$34boboo$34bobo$
+35bo5$33boo$33boo3$39bobo$31bo3bo3bobb4o$30boo4bo8bo$29bo5boobbooboobb
+o$29boboo6bo4b3o$30boo8boobboo$40boo$7boob3o$7boo4boo$6bobbobo3bo$13b
+3obb3o$15b3obobo$15bo4bo$16boo16bo4bo$32boobobbobo$32bo4boobbo37boo$
+32bo5b3o24b3o10bob3o$31boo4boo20b3obboo3bo5boboo3booboo$31boboobbo20bo
+bob4o3boo3boboobobbobboo$35boo22boo3boboo5bo3bo6bobbo$55b3obbo3bo5bobb
+o3bo10bo$54b3obboo3bo7bobooboo6bo$53bo4bobobobo4bo5boboboo7b3o$60boboo
+bb5obbobo5bo3booboboo$53boboboobboboo3bo4bobboboboobbo3bo3bo$56b3o14b
+3obboob3o$58bo12bo4b3o3bobbo$58bo13bo3boo5bo4$49boo$48bob5o$48bob3o$
+44boboobobb3o$44bobo$45bo10bo$56bo3$48boo$48booboo$26b3o13boo4boobb4o$
+28bo13booboo4bo4bo$25bobbo12bo3boo7boo$25bobbo16boo$27boo$25bobbo$25bo
+boo$25boboboo$26boobbo$27b3o$28bo11boo$40booboo$34boo4boobb4o$34booboo
+4bo4bo$33bo3boo7boo$37boo!

@@ -1,0 +1,37 @@
+#C Period 45 c/3 forwards rake.
+#C This puffer produces a forwards glider every 45 generations.
+#C This is based on a c/3 period 45 puffer whose output is modified by two
+#C large edge-spark spaceships and five small c/3 period 3 spaceships.
+#C This is an improvement on previous versions of this rake.
+#C Stephen Silver, November 2002
+x = 83, y = 117
+34bo$33b3o$14boboo14bo3bo14boobo$13boobooboobo10b3o10boboobooboo$12bo
+bbobobooboo8b5o8booboobobobbo$13bo6bo5bo4boo3boo4bo5bo6bo$21bo3b4obo7b
+ob4o3bo$25bo3b3obobob3o3bo$20boobobbo3boo5boo3bobboboo$19bo4bobbobobb
+ooboobbobobbo4bo$18boobobo6boo5boo6boboboo$16boobobo6booboboboboboo6bo
+boboo$14boobo9bo3bobbobbo3bo9boboo$13bo3bo9boboboo3boobobo9bo3bo$14bob
+o11bobobo3bobobo11bobo$31bobobobo$28bo11bo$26boobo3bobo3boboo$29bo4bo
+4bo$29bobooboboobo$28boobo5boboo$27bobobo5bobobo$26boobobob3oboboboo$
+29bobo5bobo$26booboboo3booboboo$5boboo24b3o24boobo$b3obooboboo18b9o18b
+ooboboob3o$o6boobb4o15boo5boo15b4obboo6bo$boo3bo3bo4bo12boo9boo12bo4bo
+3bo3boo$13b3o5boo9bobobo9boo5b3o$19boboo5bobboo3boobbo5boobo$16boboo3b
+oo19boo3boobo$15booboobobobo4bob5obo4bobobobooboo$15boobo4bob3ob11ob3o
+bo4boboo$19boobo3bob13obo3boboo7bo$26bo15bo13boo$27bo13bo12boobo$56bo
+bbo$30b9o8boob3o6boo$47boo3boobb3oboobb3o$29bobo5bobo7b4o5bo4b3obobo$
+28boobbo3bobboo9bobobboo4bo4bo$28bo3booboo3bo8bobbo9boo$27bobb3obob3o
+bbo5boobbo$28bobobb3obbobo5b4o16b3obo$34bo11bo3boobb3oboob3oboo4bo6bo$
+46bob6o4boobob4obobboo4b4o$46boo5bobo3bobo3bob4obboobo3boo$46b5ob3o8bo
+9b4obo3bo$48bo3bobbo22bo$24bo28booboo14bo4bo$22bo3bo23b3obbo17bo$22bo
+3bo25b4o$22bo4bo$27bo3boo$22bo3bo4boo$22boboo$$29bo$28boo$27boo$$49bo
+3bo$46boboboob3o$45bobbo6booboo$40boobboobbo3bobbobboo$29boo4bo4boobob
+oobbobbo4bobbo$29booboobo3bo3bo4boo$30bobbobo3bobobobbobboo$30boo16bo
+7bo3bo$31boo7b3o10boboboob3o$52bobbo6booboo$47boobboobbo3bobbobboo$7bo
+boo17boo17booboboobbobbo4bobbo$6boobooboo13bobbo15bo3bo4boo$5bobbobobb
+o13bobo9bo6bobobobbobboo$6bo5boo4boo8bo9bobo14bo$15booboo17boobboo4b3o
+11bo$15boo3bo21bo16b3ob3o$15boo20boo3bo15boo6bo$38bobbo11bo3bobbo3boo$
+52b4o$35bo15bo3bo$36boobobo10bobobbo$30boo5boo3bo13bo$30boo9bo4$38bo$
+18boo17bo$15booboo16bo3bo$12b4obbobo15b6o$11bo4bo4bo14boo$12boo7bo15bo
+$21bo$17b3o14bo$16bo16b4o$17boboo16bo$21bo9boboobbo$17boo12bob4o$11b3o
+bbo3bo14bo$11b3o5bo30bo$10bo3bobbo30b3ob3o$14bobbo29boo6bo$17boo23bo3b
+obbo3boo$16b3o22b4o$17boo21bo3bo$41bobobbo$45bo4$17boo$16boo6boo5bobbo
+$18bo4b3o3b3obb3o$31bobbo!
