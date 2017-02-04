@@ -389,7 +389,7 @@
       var grid = [];
       var toggledCells = [];
       var timeSinceGameUpdate = 0;
-      var stepTime = 1000;
+      var stepTime = 500;
       var stepCompletion = 0;
       var configFileList = [];
 
@@ -532,6 +532,10 @@
         var rightNeighbor = 0;
         var topNeighbor = 0;
         var bottomNeighbor = 0;
+        var ulNeighbor = 0;
+        var llNeighbor = 0;
+        var urNeighbor = 0;
+        var lrNeighbor = 0;
 
         if (col > 0) {
           leftNeighbor = grid[row][col-1][0];
@@ -545,8 +549,21 @@
         if (row < COL_SIZE-1) {
           topNeighbor = grid[row+1][col][0];
         }
+        if (row < COL_SIZE-1 && col > 0) {
+          ulNeighbor = grid[row+1][col-1][0]; 
+        }
+        if (row > 0 && col > 0) {
+          llNeighbor = grid[row-1][col-1][0]; 
+        }
+        if (row < COL_SIZE-1 && col < ROW_SIZE-1) {
+          urNeighbor = grid[row+1][col+1][0]; 
+        }
+        if (row > 0 && col < ROW_SIZE-1) {
+          lrNeighbor = grid[row-1][col+1][0]; 
+        }
 
-        return leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor;
+        return leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor +
+               ulNeighbor + llNeighbor + urNeighbor + lrNeighbor;
       }
 
       function updateDataTextureFromGrid(grid) {
