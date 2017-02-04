@@ -627,7 +627,7 @@
       function setupConfigFileList() {
         $.ajax({
           //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-          url: './test',
+          url: './configs',
           success: function (data) {
             $(data).find("a:contains(" + ".l" + ")").each(function() {
                 configFileList.push($(this).attr('href'));
@@ -657,11 +657,156 @@
 
       function loadNewConwaysConfig(text) {
         var result = parseConwaysConfig(text);
+        var comments = result[0];
+        var dimensions = result[1];
+        var grid = result[2];
+        var width = dimensions[0];
+        var height = dimensions[1];
+
+        var xOffset = ROW_SIZE - width;
+        var yOffset = COL_SIZE - height;
       }
 
       //This is for 'dbLife (*.L)' files, as described here: http://psoup.math.wisc.edu/mcell/ca_files_formats.html
       function parseConwaysConfig(text) {
+        var lines = text.match(/[^\r\n]+/g);
+        var comments = [];
+        var dimensions = [];
+        var gridText = "";
+        var gridData;
+        
+        lines.forEach(function(line) {
+          if (line.startsWith('#')) { //comments
+            comments.push(line);
+          } else if (line.toLowerCase().startsWith("x")) { //dimensions
 
+            var noWhiteSpaceLine = line.replace(/\s/g,'');
+            var xAndY = noWhiteSpaceLine.split(",");
+            var x = xAndY[0].split("=")[1];
+            var y = xAndY[1].split("=")[1];
+            dimensions.push(Number(x));
+            dimensions.push(Number(y));
+
+          } else { //grid data (actual info about whether cells are live or dead)
+            gridText += line;
+          }
+        });
+
+        gridData = parseGridText(gridText, dimensions);
+
+        return [comments, dimensions, gridData];
+      }
+
+      function parseGridText(text, dimensions) {
+        var rows = text.split("$");
+        var width = dimensions[0];
+        var height = dimensions[1];
+        var grid = new Array(height);
+        for (var i = 0; i < grid.length; i++) {
+          grid[i] = new Array(width);
+        }
+
+        // console.log("width, height: ", width, height);
+
+        rows.forEach(function(row, j) {
+          var inNumChunk = false;
+          var inBOChunk = false;
+          var numChunk = "";
+          var boChunk = "";
+          var chunks = [];
+
+          for (var i = 0; i < row.length; i++) {
+            var char = row[i];
+
+            if (char === '!') { //End of data; do nothing
+
+            } else if (char === 'o' || char === 'b') { //Live cell or dead cell
+              if (inBOChunk) {
+                boChunk += char;
+              } else {
+                boChunk = char;
+              }
+
+              inBOChunk = true;
+
+              if (inNumChunk) {
+                chunks.push(Number(numChunk));
+                inNumChunk = false;
+              }
+
+              if (i === row.length-1 || row[i+1] === "!") {
+                chunks.push(boChunk);
+              }
+            } else if (!isNaN(char)) { //It's a number
+
+              if (inNumChunk) {
+                numChunk += char;
+              } else {
+                numChunk = char;
+              }
+
+              inNumChunk = true;
+
+              if (inBOChunk) {
+                chunks.push(boChunk);
+                inBOChunk = false;
+              }
+
+              if (i === row.length-1 || row[i+1] === "!") {
+                chunks.push(numChunk);
+              }
+            } else {
+              console.log("ERROR: unexpected character in config file grid data.");
+            }
+          }
+
+          fillRow(grid[j], chunks, width);
+          
+        });
+
+        return grid;
+        // console.log("asdf:", grid);
+      }
+
+      function fillRow(row, chunks, rowSize) {
+        var rowIndex = 0;
+        var tagCount = 1;
+
+        chunks.forEach(function(chunk) {
+
+          if (!isNaN(chunk)) { //It's a number
+            tagCount = chunk;
+          } else {
+            for (var i = 0; i < chunk.length; i++) {
+              var char = chunk.charAt(i);
+
+              //Convert b and o to 0 and 1
+              if (char === 'b') {
+                char = 0;
+              } else if (char === 'o') {
+                char = 1;
+              }
+
+              if (i === 0) {
+                for (var j = 0; j < tagCount; j++) {
+                  row[rowIndex] = char;
+                  rowIndex++;
+                }
+              } else {
+                row[rowIndex] = char;
+                rowIndex++;
+              }
+            }
+            tagCount = 1;
+          }
+        });
+
+        // console.log(rowIndex, rowSize);
+        for (var i = rowIndex; i < rowSize; i++) {
+          row[i] = 0;
+        }
+
+        // console.log(row);
       }
 
       function readTextFile(file, completion)
