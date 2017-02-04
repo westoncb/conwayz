@@ -135,9 +135,18 @@
         cellBorn = cellData.z == 1. && cellData.x == 1.;
 
         // p.y += (1.0-cellData.y)*2.0;
-        float shrinkFactor = cellData.y;
-        dimensions.xyz *= shrinkFactor;
-        radius *= shrinkFactor;
+        float scaleFactor = cellData.y;
+
+        //cellData.z will be a zero if it has been more than one turn since the
+        //cell's life/death state changed. cellData.x holds a one when the cell
+        //is alive, a zero when dead. Using it as the scaleFactor ensures that
+        //the cell will be at full or zero size when an animation finishes.
+        if (cellData.z == 0.) {
+          scaleFactor = cellData.x;
+        }
+
+        dimensions.xyz *= scaleFactor;
+        radius *= scaleFactor;
 
         dimensions.xz = step(0.1, dimensions.xz)*dimensions.x;
 
@@ -394,7 +403,16 @@
       var gl;
       var ROW_SIZE = 256;
       var COL_SIZE = 256;
+
+      //A three dimensional array. Holds an array of 'row' arrays, each
+      //element of which is a four component array carrying data for a
+      //particular cell in the grid. The four components are:
+      // 0) A one or zero indicating whether the cell is live or dead.
+      // 1) A scale factor for resize animations during death/birth.
+      // 2) A one if the cell's life/death state changed this turn; otherwise a one.
+      // 3) Unused at the moment.
       var grid = [];
+
       var toggledCells = [];
       var timeSinceGameUpdate = 0;
       var stepTime = 250;
@@ -515,6 +533,7 @@
             newState = 1;
           }
           cell[0] = newState;
+          cell[2] = 1; //Indicates that its state changed this turn
         }
       }
 
