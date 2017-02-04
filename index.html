@@ -392,7 +392,7 @@
       var grid = [];
       var toggledCells = [];
       var timeSinceGameUpdate = 0;
-      var stepTime = 500;
+      var stepTime = 250;
       var stepCompletion = 0;
       var configFileList = [];
 
@@ -400,7 +400,7 @@
       update();
 
       function init() {
-        setupConfigFileList();
+        setupConfigFileDropdown();
 
 
         scene = new THREE.Scene();
@@ -462,7 +462,7 @@
 
           for (var j = 0; j < ROW_SIZE; j++) {
             var val = Math.random();
-            if (val < .7) {
+            if (val < .61803) {
               val = 1;
             } else {
               val = 0;
@@ -641,10 +641,10 @@
         }
       }
 
-      function setupConfigFileList() {
+      function setupConfigFileDropdown() {
         $.ajax({
           //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-          url: './configs',
+          url: './configs/puff',
           success: function (data) {
             $(data).find("a:contains(" + ".l" + ")").each(function() {
                 configFileList.push($(this).attr('href'));
@@ -654,7 +654,8 @@
             var dropdown = $('<div class="dropdown"></div>');
             var menu = $('<ul class="dropdown-menu"></ul>');
             var index = 0;
-            configFileList.forEach(function(fileName) {
+            configFileList.forEach(function(path) {
+              var fileName = path.substring(path.lastIndexOf('/')+1)
               menu.append('<li><a href="#" class="menu-item" id='+ index +'>' + fileName + '</a></li>');
               index++;
             });
@@ -682,6 +683,7 @@
         var configWidth = dimensions[0];
         var configHeight = dimensions[1];
 
+        //Used to center the config grid over our grid (since they may be different sizes)
         var xOffset = Math.floor((ROW_SIZE - configWidth)/2);
         var yOffset = Math.floor((COL_SIZE - configHeight)/2);
 
@@ -706,10 +708,6 @@
 
             //Each cell in the grid holds an arry of data.
             row[j] = [val,val,0,0];
-
-            // if (i >= 118 && i <= 138 && j >= 118 && j <= 138) {
-            //   row[j] = [1,1,0,0];              
-            // }
           }
 
           grid[i] = row;
@@ -756,8 +754,6 @@
         for (var i = 0; i < grid.length; i++) {
           grid[i] = new Array(width);
         }
-
-        // console.log("width, height: ", width, height);
 
         rows.forEach(function(row, j) {
           var inNumChunk = false;
@@ -815,8 +811,14 @@
           
         });
 
+        
+        //Add empty rows for the difference between specified
+        //grid height and the actual data provided
+        for (var i = rows.length; i < height; i++) {
+          fillRow(grid[i], [], width);
+        }
+
         return grid;
-        // console.log("asdf:", grid);
       }
 
       function fillRow(row, chunks, rowSize) {
@@ -852,12 +854,10 @@
           }
         });
 
-        // console.log(rowIndex, rowSize);
+        //Fill in the ends of rows with zeros
         for (var i = rowIndex; i < rowSize; i++) {
           row[i] = 0;
         }
-
-        // console.log(row);
       }
 
       function readTextFile(file, completion)
