@@ -40,12 +40,12 @@
         
         vec3 lin = vec3(0.0);
 
-        if (cellDying) {
-          float greenAndBlue = .9 - min(stepCompletion*.9, .9);
-          lin += 1.60 * dif * vec3(greenAndBlue, greenAndBlue, greenAndBlue);
-        } else if (cellBorn) {
+        if (cellBorn) {
           float redAndBlue = stepCompletion*.9;
           lin += 1.60 * dif * vec3(redAndBlue, 1., redAndBlue);
+        } else if (cellDying) {
+          float greenAndBlue = .9 - min(stepCompletion*.9, .9);
+          lin += 1.60 * dif * vec3(greenAndBlue, greenAndBlue, greenAndBlue);
         } else {
           lin += 1.60 * dif * vec3(.9);
         }
@@ -118,10 +118,9 @@
       {
         vec2 index = pMod2(p.xz, vec2(CELL_WIDTH, CELL_WIDTH));
 
-        float r = 0.3;
-
-        float g = 0.3;
-        float b = 0.3;
+        float r = 0.35;
+        float g = 0.35;
+        float b = 0.35;
 
         index.x /= row_size;
         index.y /= col_size;
@@ -153,14 +152,12 @@
         pMod2(p.xz, vec2(CELL_WIDTH, CELL_WIDTH));
         float d = length(max(abs(p)-dimensions,0.0))-radius;
 
-        vec3 albedo = vec3(0.35, 0.35, 0.35);
+        vec3 albedo = vec3(r, g, b);
 
         if (cellBorn) {
-          float redAndBlue = stepCompletion*.35;
-          albedo = vec3(redAndBlue, 0.35, redAndBlue);
+          albedo = vec3(r*(scaleFactor), g, b*(scaleFactor));
         } else if (cellDying) {
-          float color = .35 - min(stepCompletion*.35, .35);
-          albedo = vec3(color, color, color);
+          albedo = vec3(r*scaleFactor, g*scaleFactor, b*scaleFactor);
         }
 
         return Model(d, albedo, .1);
@@ -391,6 +388,7 @@
     </script>
 
     <div class="dropdown-container"></div>
+    <canvas id='canvas'></canvas>
 
     <script>
       var camera, dummyCamera, scene, controls, renderer;
@@ -432,10 +430,10 @@
         camera.position.set(0, 291.5, 0);
         camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
         geometry = new THREE.PlaneBufferGeometry( 2.0, 2.0 );
-        renderer = new THREE.WebGLRenderer();
+        canvas = document.getElementById("canvas");
+        renderer = new THREE.WebGLRenderer({ canvas: canvas });
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( 750, 750 );
-        canvas = renderer.domElement;
         gl = renderer.getContext();
 
 
