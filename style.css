@@ -1,0 +1,169 @@
+body {
+  background-color: #AAA !important;
+  margin: 0;
+  padding: 0;
+  font-family: 'Open sans', sans-serif !important;
+  color: #555;
+}
+.btn-primary {
+  background-color: #ddd !important;
+  border-color: #bbb !important;
+  color: #555 !important;
+  border-radius: 2px !important;
+  font-family: 'Open sans', sans-serif;
+}
+.configs-btn {
+  width: 100%;
+}
+.main-table {
+  position: absolute;
+  margin: auto;
+  margin-top: 25px;
+  border: 2px solid green;
+  width: 80%;
+  height: 100%;
+}
+.top-section {
+  position: relative;
+  height: 90%;
+  width: 100%;
+  border: 2px solid blue;
+}
+.bottom-section {
+  min-height: 50px;
+}
+.bottom-section-cell {
+  border: 2px solid blue;
+}
+.side-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 2px solid #555;
+  flex-grow: 1;
+  padding: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  max-width: 250px;
+  padding-bottom: 10px;
+  overflow-y: auto;
+}
+hr {
+  width: 85%;
+  border-top: 1px solid #555 !important;
+}
+
+#canvas {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #555;
+}
+.main-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: stretch;
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  margin: 0;
+}
+.title {
+  color: #555;
+  margin-left: 30px;
+  font-family: 'Sahitya', serif;
+  font-size: 40px;
+  font-weight: bold;
+  line-height: 80px;
+}
+.big-c {
+  font-size: 80px;
+}
+
+li {
+  font-family: 'Open sans', sans-serif;
+}
+
+.dropdown-menu {
+  background-color: #AAA !important;
+}
+
+.minor-title {
+  font-family: 'Open sans', sans-serif;
+  font-size: 1.5em;
+  color: #555;
+  text-align: center;
+}
+
+.intermediate-title {
+  font-family: 'Open sans', sans-serif;
+  font-size: 2.2em;
+  color: #555;
+  text-align: center;
+}
+
+.config-description {
+  overflow-y: auto;
+}
+
+.config-description-body {
+  font-family: 'Open sans', sans-serif;
+  font-size: 1em;
+  color: #555;
+  line-height: 150%
+}
+
+.controls-text {
+  margin-top: 25px;
+  font-family: 'Open sans', sans-serif;
+  font-size: 1em;
+  color: #555;
+}
+
+.controls-subsection {
+  margin-bottom: 10px;
+}
+
+.about-title {
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.about-text {
+  font-family: 'Open sans', sans-serif;
+  font-size: 1em;
+  color: #555;
+  line-height: 150%
+}
+
+.bolded {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.right-column {
+  justify-content: space-between;
+  padding-bottom: 25px;
+}
+
+.column-section {
+ display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: 250px;
+  padding-bottom: 10px;
+}
+
+a:link {
+    color: #ddd;
+}
+a:visited {
+    color: #ddd;
+}
+a:hover {
+    color: #12e068 !important;
+}
+a:active {
+    color: #12e068 !important;
+}

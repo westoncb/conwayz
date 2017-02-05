@@ -343,29 +343,53 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <style type="text/css">
-      body {
-        background-color: black !important;
-        margin: 0;
-        padding: 0;
-      }
-      canvas {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-      }
-      .btn-primary {
-        background-color: #47b733 !important;
-        border-color: #36a622 !important;
-        color: #444 !important;
-      }
-    </style>
+    <link href="https://fonts.googleapis.com/css?family=Sahitya" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" type="text/css">
   </head>
   <body>
+
+    <span class='title'><span class='big-c'>C</span>onwayz</span>
+    <div class='main-container'>
+      <div class='left-column side-column'>
+        <hr>
+        <div class='config-description'>
+          <p class='config-title minor-title'>No config selected</p>
+          <p class='config-description-body'></p>
+        </div>
+      </div>
+      <canvas id='canvas'></canvas>
+      <div class='right-column side-column'>
+        <div class='controls-section column-section'>
+          <span class='intermediate-title'>Controls</span>
+          <span class='controls-text'>
+            <div class='controls-subsection'>
+              <span class='bolded'>Zoom:</span>
+              Mouse wheel or trackpad.
+            </div>
+            
+            <div class='controls-subsection'>
+              <span class='bolded'>Pan:</span>
+              Right click and drag.
+            </div>
+
+            <div class='controls-subsection'>
+              <span class='bolded'>Tilt camera:</span>
+              Left click and drag.
+            </div>
+          </span>
+        </div>
+        <hr>
+        <div class='about-section column-section'>
+          <span class='intermediate-title about-title'>About</span>
+          <span class='about-text'>
+            This program was created by <a href="asdf">Weston Beecroft</a> mostly as a way to experiment
+            with using <a href='http://9bitscience.blogspot.com/2013/07/raymarching-distance-fields_14.html'>raymarching</a> to do something practical. It has a pretty minimal feature set at the moment, but if I may add to it in the near feature. You can contact me at <i>westoncb at Google's mail service</i>
+          </span>
+        </div>
+      </div>
+    </div>
+    
 
     <script src="build/three.js"></script>
     <script src="lib/OrbitControls.js"></script>
@@ -386,9 +410,7 @@
         gl_Position = vec4(position, 1.0);
       }
     </script>
-
-    <div class="dropdown-container"></div>
-    <canvas id='canvas'></canvas>
+  
 
     <script>
       var camera, dummyCamera, scene, controls, renderer;
@@ -413,7 +435,7 @@
 
       var toggledCells = [];
       var timeSinceGameUpdate = 0;
-      var stepTime = 250;
+      var stepTime = 500;
       var stepCompletion = 0;
       var configFileList = [];
 
@@ -460,11 +482,13 @@
         scene.add( mesh );
         canvas.addEventListener( 'mousemove', onMouseMove );
         window.addEventListener( 'resize', onWindowResize );
-        document.body.appendChild( canvas );
+        // document.body.appendChild( canvas );
         controls = new THREE.OrbitControls( camera, canvas );
         controls.enableZoom = true;
         stats = new Stats();
         // document.body.appendChild( stats.dom );
+
+        onWindowResize();
       }
 
       function textureFromFloats(gl,width,height,float32Array) 
@@ -672,27 +696,33 @@
                 configFileList.push($(this).attr('href'));
             });
 
-            var dropdownContainer = $('.dropdown-container');
+            var dropdownContainer = $('.left-column');
             var dropdown = $('<div class="dropdown"></div>');
             var menu = $('<ul class="dropdown-menu"></ul>');
             var index = 0;
             configFileList.forEach(function(path) {
-              var fileName = path.substring(path.lastIndexOf('/')+1)
+              var fileName = fileNameOnly(path);
               menu.append('<li><a href="#" class="menu-item" id='+ index +'>' + fileName + '</a></li>');
               index++;
             });
 
-            dropdown.append('<button class="btn btn-primary dropdown-toggle" type="button" data-' +
+            dropdown.append('<button class="configs-btn btn btn-primary dropdown-toggle" type="button" data-' +
               'toggle="dropdown">Configurations <span class="caret"></span></button>');
             dropdown.append(menu);
-            dropdownContainer.append(dropdown);
+            dropdownContainer.prepend(dropdown);
 
             $('.menu-item').click(function(e) {
               var index = Number(e.target.id);
-              readTextFile(configFileList[index], loadNewConwaysConfig);
+              var path = configFileList[index];
+              readTextFile(path, loadNewConwaysConfig);
+              $('.config-title').text(fileNameOnly(path));
             });
           }
         });
+      }
+
+      function fileNameOnly(path) {
+        return path.substring(path.lastIndexOf('/')+1);
       }
 
       function loadNewConwaysConfig(text) {
@@ -706,6 +736,18 @@
         var configHeight = dimensions[1];
 
         copyConfigGridIntoGrid(configWidth, configHeight, configGrid, grid);
+
+        displayComments(comments);
+      }
+
+      function displayComments(comments) {
+        var commentText = "";
+
+        comments.forEach(function(comment) {
+          commentText += comment.substring(2);
+        });
+
+        $('.config-description-body').text(commentText);
       }
 
       function copyConfigGridIntoGrid(configWidth, configHeight, configGrid, grid) {
@@ -791,9 +833,7 @@
           for (var i = 0; i < row.length; i++) {
             var char = row[i];
 
-            if (char === '!') { //End of data; do nothing
-
-            } else if (char === 'o' || char === 'b') { //Live cell or dead cell
+            if (char === 'o' || char === 'b') { //Live cell or dead cell
               if (inBOChunk) {
                 boChunk += char;
               } else {
@@ -828,7 +868,7 @@
               if (i === row.length-1 || row[i+1] === "!") {
                 chunks.push(numChunk);
               }
-            } else {
+            } else if (char !== "!") { // "!" indicates the end of the data
               console.log("ERROR: unexpected character in config file grid data.");
             }
           }
@@ -916,8 +956,15 @@
         mouse.y = e.offsetY / canvas.height;
       }
 
-      function onWindowResize( e ) {
-        renderer.setSize( canvas.width, canvas.height );
+      function onWindowResize( e) {
+        var win = $(window);
+        var canvas = $('#canvas');
+        var height = win.height() - 120;
+        var size = Math.min(height, win.width());
+
+        renderer.setSize( size, size );
+        canvas.css('width', size);
+        canvas.css('height', size);
       }
     </script>
 
