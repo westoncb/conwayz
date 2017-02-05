@@ -68,6 +68,7 @@ hr {
   left: 30px;
   right: 30px;
   margin: 0;
+  min-width: 980px;
 }
 .title {
   color: #555;
@@ -132,7 +133,7 @@ li {
 
 .about-text {
   font-family: 'Open sans', sans-serif;
-  font-size: 1em;
+  font-size: .9em;
   color: #555;
   line-height: 150%
 }
@@ -166,4 +167,10 @@ a:hover {
 }
 a:active {
     color: #12e068 !important;
+}
+
+.dropdown-menu>li>a:hover {
+    color: #262626;
+    text-decoration: none;
+    background-color: #AAA !important;
 }
