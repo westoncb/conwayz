@@ -349,19 +349,11 @@
   </head>
   <body>
 
-    <span class='title'><span class='big-c'>C</span>onwayz</span>
+    <span class='title'><span class='big-c'>C</span>onwayz</span><span class='subtitle'>—"Conway's Game of Life, with good graphics."</span>
     <div class='main-container'>
       <div class='left-column side-column'>
-        <hr>
-        <div class='config-description'>
-          <p class='config-title minor-title'>No config selected</p>
-          <p class='config-description-body'></p>
-        </div>
-      </div>
-      <canvas id='canvas'></canvas>
-      <div class='right-column side-column'>
         <div class='controls-section column-section'>
-          <span class='intermediate-title'>Controls</span>
+          <span class='minor-title'>Controls</span>
           <span class='controls-text'>
             <div class='controls-subsection'>
               <span class='bolded'>Zoom:</span>
@@ -388,6 +380,15 @@
           </span>
         </div>
       </div>
+      <canvas id='canvas'></canvas>
+      <div class='right-column side-column'>
+        <hr>
+        <div class='config-description'>
+          <p class='config-title minor-title'>No config selected</p>
+          <p class='config-description-body'></p>
+        </div>
+      </div>
+      
     </div>
     
 
@@ -696,7 +697,7 @@
                 configFileList.push($(this).attr('href'));
             });
 
-            var dropdownContainer = $('.left-column');
+            var dropdownContainer = $('.right-column');
             var dropdown = $('<div class="dropdown"></div>');
             var menu = $('<ul class="dropdown-menu"></ul>');
             var index = 0;
