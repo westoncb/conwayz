@@ -349,7 +349,7 @@
   </head>
   <body>
 
-    <span class='title'><span class='big-c'>C</span>onwayz</span><span class='subtitle'>—"Conway's Game of Life, with good graphics."</span>
+    <span class='title'><span class='big-c'>C</span>onwayz</span><span class='subtitle'>—"Conway's Game of Life with good graphics."</span>
     <div class='main-container'>
       <div class='left-column side-column'>
         <div class='controls-section column-section'>
@@ -384,7 +384,7 @@
       <div class='right-column side-column'>
         <hr>
         <div class='config-description'>
-          <p class='config-title minor-title'>No config selected</p>
+          <p class='config-title minor-title'>No pattern selected</p>
           <p class='config-description-body'></p>
         </div>
       </div>
@@ -708,7 +708,7 @@
             });
 
             dropdown.append('<button class="configs-btn btn btn-primary dropdown-toggle" type="button" data-' +
-              'toggle="dropdown">Configurations <span class="caret"></span></button>');
+              'toggle="dropdown">Patterns <span class="caret"></span></button>');
             dropdown.append(menu);
             dropdownContainer.prepend(dropdown);
 
@@ -965,11 +965,8 @@
         var win = $(window);
         var canvas = $('#canvas');
         var height = win.height() - 120;
-        var size = Math.min(height, win.width());
 
-        renderer.setSize( size, size );
-        canvas.css('width', size);
-        canvas.css('height', size);
+        renderer.setSize( canvas.outerWidth(), height );
       }
     </script>
 

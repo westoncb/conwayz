@@ -14,14 +14,8 @@ body {
 }
 .configs-btn {
   width: 100%;
-}
-.main-table {
-  position: absolute;
-  margin: auto;
-  margin-top: 25px;
-  border: 2px solid green;
-  width: 80%;
-  height: 100%;
+  font-family: 'Open sans', sans-serif;
+  font-size: 1.1em !important;
 }
 .top-section {
   position: relative;
@@ -47,6 +41,7 @@ body {
   max-width: 250px;
   padding-bottom: 10px;
   overflow-y: auto;
+  flex-shrink: 1;
 }
 hr {
   width: 85%;
@@ -58,6 +53,9 @@ hr {
   margin-left: auto;
   margin-right: auto;
   border: 1px solid #555;
+  flex-shrink: 4;
+  flex-grow: 1;
+  min-width: 0px;
 }
 .main-container {
   display: flex;
