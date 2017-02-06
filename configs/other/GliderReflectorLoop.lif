@@ -1,0 +1,18 @@
+#CSnark Glider Reflector Loop
+#C
+#CA set of 4 small stable glider reflectors takes a glider around the loop (period 252)
+#C
+#CThis reflector has a repeat time of 43 ticks, so any period 43 or above can be achieved by adding more gliders to the loop and adjusting the size of the loop.
+#C
+#CBy Mike Playle.
+#C
+#CFrom a patterns collection by Alan Hensel
+x = 51, y = 51
+26b2o3b2o$24b3obo2b2o$23bo4bo$23bo2b2ob4o$22b2obobobo2bo$23bobobobo$
+23bobob2o$24bo2$37b2o$28b2o7bo$28b2o5bobo$9bo25b2o$9b3o$12bo15b2o$11b
+2o15bobo$28bo2$2ob2o$2obo21b2o$3bo22bo$3b3o4b2o11b3o$b2o3bo3b2o11bo22b
+o$o2b4o21b2o14b5o$2obo15b2o8bo13bo5bo$bo2b3o12bobo7bobo12b3o2bo$bo5bo
+13bo8b2o15bob2o$2b5o14b2o21b4o2bo$4bo22bo11b2o3bo3b2o$25b3o11b2o4b3o$
+24bo22bo$24b2o21bob2o$46b2ob2o3$38b2o$38bo$39b3o$14b2o25bo$13bobo5b2o$
+13bo7b2o$12b2o2$26bo$22b2obobo$21bobobobo$18bo2bobobob2o$18b4ob2o2bo$
+22bo4bo$18b2o2bob3o$18b2o3b2o!

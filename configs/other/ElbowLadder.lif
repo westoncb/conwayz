@@ -1,0 +1,60 @@
+#CSingle Glider Elbow Ladder
+#C
+#CCan the Game of Life support artificial Life? Unfortunately, despite the name of the game, Conway's rules have proven less than ideal for the construction of patterns that mimic the behavior of life. The pattern would be horrendously large and complex. But it has been proven that it can be done. To do so, one must imagine a pattern that can construct a copy of itself in another location. This is a little hard to imagine without the help of patterns like Elbow Ladder.
+#C
+#CElbow Ladder is one of many patterns that demonstrate the ability of a finite pattern to place another object essentially anywhere in the universe. One detail that aids the imagination is the fact that it consists mostly of p30 glider guns, which can be built from gliders (see GliderGunSyntheses). 
+#C
+#CBy Scot Ellison, April 1997, based on Dieter Leithner's side shooting pseudoperiod 124 glider gun (improved by Dean Hickerson).
+#C
+#CFrom a patterns collection by Alan Hensel
+x = 187, y = 206
+141boo$141bo$159boo$128boo29bo$128bo$173boo$173bo3$139boo3boo$142bo$
+139bo5bo10boo3boo$95boo43booboo12b5o$95bo31b3o11bobo14b3o$126bo3bo11bo
+16bo$82boo41bo5bo10bo27booboboo$82bo42bo5bo$128bo41bo5bo$126bo3bo$127b
+3o41booboo$128bo44bo$82bo55bobo19bo$82bo13bo41boo21boo$81bobo11b3o27b
+3o11bo3b3o14boo$80booboo9b5o26b3o14bo3bo$79bo5bo7boo3boo24bo3bo12bo5bo
+$82bo11b5o33bobo6booboboo$79boo3boo8bo3bo24boo3boo3boo39b3o$95bobo35bo
+20boo3boo12bo3bo$96bo59b3o$155bo3bo12bo5bo$156bobo13boo3boo$98bo58bo$
+96booboo45boo$146bo$95bo5bo45b3o4boo$149bo5bo$95booboboo24boo24b3o$77b
+ooboboo42bo9b4o12bo$77bo5bo47boo7bo33boo$78bo3bo48bo3boo3bo24boo7bo6bo
+$79b3o53bo3bo15bo6bobobboboo8b3o$153boo6boobbo4bo7bo$154boo10bo11boo$
+142boo23bo$100boo40bo19bo$100bo28boo9bobo17b3o13bo$97bo3b3o27bo8boo17b
+o14booboo$59boo34bobo5bo17boo9bo26boo$59bo20boo14boo23bo10bo40bo5bo$
+80bo8boo41bo$46boo37boobboobboo36bo41booboboo$46bo38bobobbobbo35boo5bo
+$86b3o47bobo$60bo26boo47boo40bo$60bo114bobbo$59bobo116bo$58booboo83bo
+27boo$57bo5bo82bobo5boo3boo13bo$43bo5bo10bo85boo8b3o15bobo$43bo5bo7boo
+3boo30bo60bo3bo15boo$44bo3bo45boo60bobo$45b3o34boo11boo27boo31bo$81b3o
+3bo7b3o7boo17bo50boo3boo$78boboo4b4o5boo8bo53boo14bo5bo$71boo5bobbo4bo
+4bobboo63bo$71bo6boboo5bo3bobbo65b3o13bo3bo$81b3o3boobo71bo14b3o$82boo
+23boo$106bobbo$109bo$59booboboo43bo15bo10boo$59bo5bo40boobo13boo11bobo
+15bo$60bo3bo42bo16boo10bo17boo$61b3o$24boo129bo$24bo16boo3boo33bo25boo
+45bobo$55bo24bobo24bo19bo25bobbo$11boo29bo3bo9bo11boo9bo3boo8bo9bo21bo
+bo24bobbo12bo$11bo31b3o8b3o11bo10bo3boo5b4o10boo20boo39boo3boo3boo$43b
+3o33bo3boo4b4o10boo50bo11bobo$64boo14bobo6bobbo47bo13boo17bo3bo$64bo
+16bo7b4o45b3o33b3o$65b3o22b4o7boo34bo36b3o$22boo3boo38bo25bo7bobo6bo
+26boo$25bo18boo57bo5bo$22bo5bo15bo9bo48boo4b3o50boo9bo$23booboo21b3ob
+oobboo57bo41boobboobboo4b3o$10b3o11bobo22b4o4bo58bobo39bobobbobbo4bo3b
+o$9bo3bo11bo27boo61boo41b3o11bo$8bo5bo10bo134boo8bo5bo$8bo5bo155bo5bo$
+11bo58bo100bo3bo$9bo3bo57bo100b3o$10b3o56b3o61b5o$11bo120bob3obo$21bob
+o35bobo71bo3bo$21boo36bo3bo70b3o$8b3o11bo3b3o14bo19bo71bo$8b3o14bo3bo
+11b4o14bo4bo4boo50boo$7bo3bo12bo5bo9boboboo17bo5bo51bo60boo$24booboboo
+4boobbobbob3o12bo3bo31bo70boo7boo5bo$6boo3boo3boo17bo4boboboo13bobo31b
+oo40boo23bo5bobo6bo$16bo24b4o49boo11bo10bobo14bo24b3o3bo9b3o$43bo28bo
+33bo10bobbo42bo14bo$71boo33b3o7boo44boo$114boo3bo8boo$72bo43boo10bo$
+23bo5boo40bobo43bobbo$24boo3bo31bobo6bobbo44bobo61b3o$23boo5b3o29boo5b
+obbo38bo69bo3bo$32bo29bo47b3o67bo5bo$9boo21bobo8boo27bo36b5o66booboboo
+$9bo8boo13boo7b3o26boo89booboboo$14boobobboboo15boboo12bo24bo$14bo4bo
+bbo16bobbo12boo22bo82bo5bo$18bo20boboo13boo21b3o$17bo24b3o11b3o27bo17b
+o58booboo$43boo11boo28bobo13b3o60bo$55boo8boo19boo13bo7b5o$55bo9bobo
+33boo7b3o$67bo43bo55bo$67boo97bobo$165bo3bo8boo3boo$76bobo14bobo69b5o
+11bo$77boo14boo4bo64boo3boo7bo5bo$77bo16bo3b3o64b5o9booboo$28bo69b3o
+65b3o11bobo$28b4o135bo13bo$12bo16b4o63boo3boo78bo$11bobo5boo8bobbo5boo
+56bo4bo$9boo3bo14b4o5bo26bo$4boo3boo3bo4boboboo3b4o31boo$4bo4boo3bo5b
+oo3bobbo35boo11bo$11bobo10bo51bo103boo$12bo8bobbo15boo34b3o6boo93bo$
+40bobo42bo$41b3o123boo$42boo9bo45boo66bo$25b3o3bo7boo13boo43bo$27bo4bo
+6b3o11boo$oo24bo3b3o$bo$bobo8boo26boo$bboo8bo5bo21bo9bo$9boo6b5oboo24b
+o$8b3o5bobboo4bo23b3o$9boo5boo8bo29bo$12boo4bo7bo29bobo$12bo13bo29boo$
+25bo8boo26bo$23boo9bobo23boo$36bo24boo14bo$36boo37b3o$74bo$74boo$32bo$
+32bobo$32boo4$69boo3boo$47bo21bobobobo$46bo23b5o$46b3o22b3o$53bo18bo$
+53bobo$53boo$$58boo$58bo$$72boo$72bo4$22boo$22bo$32bo$30boo$31boo11$
+17bo$16bo$16b3o$23bo$23bobo$23boo6$12boo$12bo!

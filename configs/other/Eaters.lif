@@ -1,0 +1,17 @@
+#CThe larger examples are all by Dean Hickerson; the smaller examples are well known.
+#C
+#CFrom a patterns collection by Alan Hensel
+x = 63, y = 64
+52bo$50bobo$51boo3$17bo15bo21bo$bbo12bobo13bobo19bobo$obo13boo14boo20b
+oo$boo$60bo$59bo$38boo19b3o$22boobo11bobbobboo$8boo12boob3o9bobo4bobbo
+6boo$8bobo17bo9bo5bobobo5boo3bo$10bo11boob3o13boobobbo10bobo$10boo11bo
+bo15bobbo14bobo$23bobo12bo4bo17bo$24bo13b5o18boo$$40bo$39bobo$40bo5$bb
+o16bo15bo16bo$obo14bobo13bobo14bobo$boo15boo14boo15boo$60boo$11boo46bo
+bo$8boobbo30boo14bo$5boobbobo9bo3boo11boobobbo12b3obbo$5boobobboo7bobo
+3bo10bobob3o12bo3b3o$8bobo9boo3bo6boo3bobo15bob3o$8bobo13bo7bobbobob3o
+13bo4bo$9bo10b5obo6b4obo3bo13boboobo$20bo4bobo10bobboo11bobobobbo$21bo
+bbobbo7bobo15boboo3bo$20boo3boo8boo16bo3b3o$52boo3bo8$60bo$58bobo$59b
+oo$$5bo10boo$3bobo10bobo35bo$4boo10bo14bo9boo9bobo$8boobboo15bobo8boo
+11boo$5bo3bobboo16boo10bo$boobb4o24boobboo18boobboo$bo28bo3bobboo15bo
+3bobboo$bb5o23b4o20b4o$7bo$4b3o23boo22boo$4bo25boo22boo!
+Examples of glider eaters.

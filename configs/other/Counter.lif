@@ -1,0 +1,26 @@
+#C4-digit Base-4 counter
+#C
+#CThis is the most efficient means yet found to thin a glider stream. Each of the four small multiplier units increases the period of the incoming p30*n stream by a factor of 4. This example starts with a p120 gun, so its final period is 120*4*4*4*4 = 30720.
+#C
+#CYou can also view this as a Base-4 counter, with the digits encoded as follows: 0=nothing, 1=boat, 2=blinker, 3=block. However, there is a carry propagation delay of 83 generations.
+#C
+#CSee also GliderGuns, HerschelTrack.
+#C
+#CFrom a patterns collection by Alan Hensel
+x = 88, y = 112
+18boo$18boo5$19bo$19bo$18bobo$17booboo$16bo5bo$19bo$16boo3boo$$31bo$
+31bobo$32bobo4boo$32bobbo3boo$32bobo$31bobo$31bo13bo$43b3o$42bo$42boo
+5$46boo$11boo33boo$11boo4b3o$8boo6b5o18b3o$oo5b3o5bo3bobo16bo3bo$oo6b
+oo6bo3boo15bo5bo4boo$11boo25bo3bo$11boo26b3o$20boo17b3o$19bo3bo$8boo8b
+o5bo19boo3boo$8boo8bo3boboo19b5o$18bo5boo14boo3booboo$19bo4boo14boo3b
+ooboo$20boo3bo20b3o6bo$24bobo27bobo$24bobo26boboo10boo$25bo26booboo10b
+oo$53boboo$54bobo$22boo3boo26bo17bo$22bo5bo42b3o$70bo$23bo3bo42boo$24b
+3o41b3o$67bobo$66bo3bo$66b5o$65boo3boo$37boo27b5o$37b3o27b3o$24boo13b
+oobo25bo$24boo13bobbo5boo$39boobo5boo$30boo5b3o$29bobo5boo$29bo15bo$
+28boo15boo$36boobboo4boo$36boobboo4b3o$40boo4boo20boo$45boo21boo$45bo
+3$75boo10bo$53bo17boobboobboo4b3o$52b3o16bobobbobboo3bo$52b3o4bo12b3o
+9boo$59b3o11boo$50boo3boo5bo$50boo3boo4boo$$64bo$53bo9b3o13boo3boo$52b
+obo7bo3bo7boo3boo3boo$54boo5bob3obo6boo$54boo6b5o14b3o$53b3o25b3o$52bo
+bo27bo$52boo$$67b3o$69bo$68bo$79b3o$79b3o$78bo3bo$$77boo3boo$$65b3o$
+64bo3bo$63bo5bo$63booboboo3$66bo$65bobo$65bobo11boo$66bo12boo$$66boo$
+66boo!

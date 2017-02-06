@@ -1,0 +1,13 @@
+#CGlider syntheses for glider guns
+#C
+#C8 gliders synthesize the classic p30 Gosper gun.
+#C
+#C12 gliders synthesize a double barreled p46 glider gun. (Dieter Leithner, 8 May 1992)
+#C
+#CFrom a patterns collection by Alan Hensel
+x = 150, y = 31
+109bobo$110boo$110bo7$123bo7bo$124bo5bo$16bo105b3o5b3o$16bobo16bo58bob
+o52bo$16boo17bobo57boo50boo$obo10bo21boo58bo16bo15b3o17boo$boo11boo97b
+o14bo$bo11boo77boo17b3o15bo16bo$93boo50boo$92bo52bobo$10boo20boo75b3o
+5b3o$11boo19bobo9b3o64bo5bo$10bo21bo11bo65bo7bo$27bo17bo$27boo$26bobo
+4$131bo$130boo$130bobo!
