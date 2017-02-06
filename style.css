@@ -50,7 +50,7 @@ body {
 }
 hr {
   width: 85%;
-  border-top: 1px solid #777 !important;
+  border-top: 2px solid #777 !important;
 }
 
 #canvas {
