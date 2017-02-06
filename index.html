@@ -691,7 +691,7 @@
       function setupConfigFileDropdown() {
         $.ajax({
           //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-          url: './configs/puff',
+          url: './configs/other',
           success: function (data) {
             $(data).find("a:contains(" + ".l" + ")").each(function() {
                 configFileList.push($(this).attr('href'));
@@ -744,11 +744,15 @@
       function displayComments(comments) {
         var commentText = "";
 
-        comments.forEach(function(comment) {
-          commentText += comment.substring(2);
+        comments.forEach(function(comment, i) {
+          var prefix = '';
+          if (i !== 0) {
+            prefix = '<br>'
+          }
+          commentText += prefix + comment.substring(2);
         });
 
-        $('.config-description-body').text(commentText);
+        $('.config-description-body').html(commentText);
       }
 
       function copyConfigGridIntoGrid(configWidth, configHeight, configGrid, grid) {
