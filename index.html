@@ -349,7 +349,7 @@
   </head>
   <body>
 
-    <span class='title'><span class='big-c'>C</span>onwayz</span><span class='subtitle'>—"Conway's Game of Life with good graphics."</span>
+    <span class='title'><span class='big-c'>C</span>onwayz</span><span class='subtitle'>—"The vital, Conwaysian cellular automaton we all know and love."</span>
     <div class='main-container'>
       <div class='left-column side-column'>
         <div class='controls-section column-section'>
@@ -380,7 +380,10 @@
           </span>
         </div>
       </div>
-      <canvas id='canvas'></canvas>
+      <div class='center-column'>
+        <canvas id='canvas'></canvas>
+        <div class='control-bar'></div>
+      </div>
       <div class='right-column side-column'>
         <hr>
         <div class='config-description'>
@@ -456,7 +459,6 @@
         canvas = document.getElementById("canvas");
         renderer = new THREE.WebGLRenderer({ canvas: canvas });
         renderer.setPixelRatio( window.devicePixelRatio );
-        renderer.setSize( 750, 750 );
         gl = renderer.getContext();
 
 
@@ -961,12 +963,41 @@
         mouse.y = e.offsetY / canvas.height;
       }
 
-      function onWindowResize( e) {
-        var win = $(window);
-        var canvas = $('#canvas');
-        var height = win.height() - 120;
+      var timeoutEvent;
 
-        renderer.setSize( canvas.outerWidth(), height );
+      function onWindowResize( e) {
+        doResize();
+
+        clearTimeout(timeoutEvent);
+        timeoutEvent = setTimeout(doResize, 500);
+      }
+
+      function doResize() {
+        var win = $(window);
+        var centerColumn = $('.center-column');
+        var canvas = $('#canvas');
+        var controlBar = $('.control-bar');
+
+        var controlBarHeight = 40;
+        var freeVerticalSpace = 120;
+        var columnHeight = win.height() - freeVerticalSpace;
+        var width = centerColumn.width();
+        var canvasHeight = columnHeight - controlBarHeight;
+
+        centerColumn.css('height', columnHeight);
+        canvas.css('height', canvasHeight)
+        controlBar.css('height', controlBarHeight);
+        controlBar.css('width', width);
+
+        //There is more complexity in this resize function than it seems like
+        //needs to be, because this 'setSize' function must be called in order to
+        //update properties of the threejs renderer—but it also updates the canvas
+        //component size (which we would prefer to be resized automatically through CSS).
+        //Flexbox is resizing the canvas' container, and we want the width of the canvas
+        //to match the container width—but there is some timing issue or something with
+        //retreiving the width (which is why we use a delay in 'onWindowResize'). The most
+        //this has done is mitigate the issue; the layout remains imperfect.
+        renderer.setSize(width, canvasHeight);
       }
     </script>
 

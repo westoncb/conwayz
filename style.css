@@ -39,6 +39,7 @@ body {
   margin-left: 5px;
   margin-right: 5px;
   max-width: 250px;
+  min-width: 150px;
   padding-bottom: 10px;
   overflow-y: auto;
   flex-shrink: 1;
@@ -46,16 +47,6 @@ body {
 hr {
   width: 85%;
   border-top: 2px solid #777 !important;
-}
-
-#canvas {
-  display: inline-block;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid #555;
-  flex-shrink: 4;
-  flex-grow: 1;
-  min-width: 0px;
 }
 .main-container {
   display: flex;
@@ -68,6 +59,40 @@ hr {
   margin: 0;
   min-width: 980px;
 }
+
+.center-column {
+  display: inline-flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: stretch;
+  margin-left: auto;
+  margin-right: auto;
+  flex-shrink: 1;
+  flex-grow: 1;
+  min-width: 0px;
+}
+
+#canvas {
+  min-width: 0px;
+  min-height: 0px;
+  border: 1px solid #555;
+  flex-shrink: 1;
+  flex-grow: 1;
+  border-bottom: 1px solid black;
+}
+
+.control-bar {
+  background-color: #555;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  height: 40px;
+  max-height: 40px;
+  min-width: 0px;
+  flex-shrink: 1;
+  flex-grow: 0;
+}
+
 .title {
   color: #555;
   margin-left: 30px;
@@ -149,7 +174,7 @@ li {
 }
 
 .column-section {
- display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   max-width: 250px;
