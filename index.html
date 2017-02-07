@@ -12,19 +12,20 @@
       const float OFFSET = EPS * 100.0;
       const float bevel = 0.8;
       const vec3 lightDir = vec3( -0.48666426339228763, 0.8111071056538127, -0.3244428422615251 );
-      const vec3 box = vec3(3., 0.75, 3.);
+      const vec3 box = vec3(4., 0.5, 4.);
       const float CELL_WIDTH = 10.0;
       uniform sampler2D tex;
       bool cellDying = false;
       bool cellBorn = false;
 
       const vec3 FACE_COLOR = vec3(.9,.9,1.);
-      const vec3 BACKGROUND_COLOR = vec3(.01, .02, .05);
+      const vec3 BACKGROUND_COLOR = vec3(0., 0., 0.);
 
       struct Model {
         float dist;
         vec3 albedo;
         float glow;
+        float id;
       };
 
       vec3 doLighting(Model model, vec3 pos, vec3 nor, vec3 ref, vec3 rd) {
@@ -160,7 +161,7 @@
           albedo = vec3(r*scaleFactor, g*scaleFactor, b*scaleFactor);
         }
 
-        return Model(d, albedo, .1);
+        return Model(d, albedo, .1, 1.);
       }
 
       // Plane with normal n (n is normalized) at some distance from the origin
@@ -216,7 +217,7 @@
 
           vec3 rayVec = ray.origin + ray.direction * ray.len;
           boxModel = roundBox(rayVec, box, bevel);
-          planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.4, 0.5, 0.6), 0.12);
+          planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.4, 0.5, 0.6), 0.12, 0.);
 
           model = boxModel;
           if (planeModel.dist < boxModel.dist) {
@@ -237,24 +238,6 @@
         } else {
           pos = ray.origin + ray.direction * ray.len;
           normal = calcNormal(pos);
-
-          if (planeModel.dist <= boxModel.dist) {
-            // normal = vec3(0, 1, 0);
-            float test = abs(pos.x);
-            pModInterval1(test, CELL_WIDTH, 0.0, 50000.0);
-            test = step(4.0, test);
-            test = 1.0 - test;
-
-            float test2 = abs(pos.z);
-            pModInterval1(test2, CELL_WIDTH, 0.0, 50000.0);
-            test2 = step(4.0, test2);
-            test2 = 1.0 - test2;
-            float intensity = test*test2/2.;
-            // intensity = 1.0;
-            model.albedo.x = intensity*0.2;
-            model.albedo.y = intensity*0.3;
-            model.albedo.z = intensity*0.5;
-          }
         }
 
         return Hit(ray, model, pos, isBackground, normal, color);
@@ -276,6 +259,38 @@
 
         vec3 ref = reflect(hit.ray.direction, hit.normal);
 
+        //Draw grid
+        if (hit.model.id == 0.) {
+          vec3 pos = hit.pos;
+          vec3 bluish = vec3(0.08, 0.18, 0.28);
+          vec3 black = vec3(0.0, 0.0, 0.0);
+
+          float modx = abs(pos.x);
+          modx += 0.1 * CELL_WIDTH;
+          pModInterval1(modx, CELL_WIDTH, 0.0, 50000.0);
+
+          float cellx = modx / CELL_WIDTH + 0.5;
+          float howBlack = smoothstep(0., 0.05, cellx);
+          howBlack += smoothstep(0.1, 0.15, cellx);
+
+          float modz = abs(pos.z);
+          modz += 0.1 * CELL_WIDTH;
+          pModInterval1(modz, CELL_WIDTH, 0.0, 50000.0);
+
+          float cellz = (modz / CELL_WIDTH + 0.5);
+          float alreadyBlack = 1. - howBlack;
+          howBlack += smoothstep(0., 0.05, cellz)*alreadyBlack;
+          howBlack += smoothstep(0.1, 0.15, cellz)*alreadyBlack;
+
+          //Because of aliasing effects, don't draw the grid outside a 
+          //certain distance.
+          float distanceFade = 1. - smoothstep(0., 800., hit.ray.len);
+          howBlack *= distanceFade;
+
+          vec3 color = bluish*(1.-howBlack) + black*(howBlack);
+          hit.model.albedo = color;
+        }
+
         #ifdef DEBUG
           color = hit.normal * 0.5 + 0.5;
         #else 
@@ -287,6 +302,16 @@
             hit.ray.direction
           );
         #endif
+
+        if (hit.model.id == 0.) { //It's the floor
+
+          //Fade between using lighting calculations, and just using
+          //a solid color (in order to avoid aliasing from lighting
+          //contribution ending abruptly at tile boundaries.)
+          float ratio = smoothstep(0., 1000., hit.ray.len);
+          hit.color = (1.-ratio)*color + ratio*(hit.model.albedo/15.);
+          return;
+        }
 
         hit.color = color;
       }
