@@ -67,10 +67,10 @@
       // Adapted from cabbibo https://www.shadertoy.com/view/Xl2XWt
       // --------------------------------------------------------
 
-      const float MAX_TRACE_DISTANCE = 20000.; // max trace distance
+      const float MAX_TRACE_DISTANCE = 10000.; // max trace distance
       const float INTERSECTION_PRECISION = .001; // precision of the intersection
-      const int NUM_OF_TRACE_STEPS = 100;
-      const float FUDGE_FACTOR = .9; // Default is 1, reduce to fix overshoots
+      const int NUM_OF_TRACE_STEPS = 200;
+      const float FUDGE_FACTOR = .7; // Default is 1, reduce to fix overshoots
 
       struct CastRay {
         vec3 origin;
@@ -121,7 +121,7 @@
 
         float r = 0.35;
         float g = 0.35;
-        float b = 0.35;
+        float b = 0.4;
 
         index.x /= row_size;
         index.y /= col_size;
@@ -522,7 +522,7 @@
         controls = new THREE.OrbitControls( camera, canvas );
         controls.enableZoom = true;
         stats = new Stats();
-        // document.body.appendChild( stats.dom );
+        document.body.appendChild( stats.dom );
 
         updateCenterColumnSize();
         setUpSpeedSlider();
