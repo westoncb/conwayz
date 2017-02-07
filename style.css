@@ -7,7 +7,7 @@ body {
 }
 .btn-primary {
   background-color: #ddd !important;
-  border-color: #bbb !important;
+  border-color: #aaa !important;
   color: #555 !important;
   border-radius: 2px !important;
   font-family: 'Open sans', sans-serif;
@@ -79,11 +79,11 @@ hr {
   border: 1px solid #555;
   flex-shrink: 1;
   flex-grow: 1;
-  border-bottom: 1px solid black;
 }
 
 .control-bar {
-  background-color: #555;
+  display: flex;
+  align-items: stretch;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 2px;
   height: 40px;
@@ -91,6 +91,52 @@ hr {
   min-width: 0px;
   flex-shrink: 1;
   flex-grow: 0;
+}
+
+.button-section {
+  display: flex;
+  align-items: center;
+  flex-shrink: 1;
+  flex-grow: 1;
+  max-width: 200px;
+}
+
+.control-btn {
+  margin-left: 5px;
+  font-size: 1.2em !important;
+  padding: 2px 10px 0px 10px !important;
+}
+
+.btn:focus,.btn:active {
+   outline: none !important;
+}
+
+.btn:hover {
+  background-color: #eee !important;
+}
+
+.btn:active {
+  background-color: #ccc !important;
+}
+
+.speed-section {
+  /*background-color: blue;*/
+  flex-shrink: 1;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+.speed-slider {
+  max-width: 250px;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+
+.btn:hover {
+  background-color: #eee !important;
 }
 
 .title {

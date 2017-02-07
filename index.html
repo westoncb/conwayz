@@ -382,7 +382,18 @@
       </div>
       <div class='center-column'>
         <canvas id='canvas'></canvas>
-        <div class='control-bar'></div>
+        <div class='control-bar'>
+          <div class='button-section'>
+            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-play'></span></button>
+            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-pause'></span></button>
+            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-step-backward'></span></button>
+            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-step-forward'></span></button>
+          </div>
+          <div class='speed-section'>
+            <span>Speed:</span>
+            <input type='range' class='speed-slider' min='0' max='100'>
+          </div>
+        </div>
       </div>
       <div class='right-column side-column'>
         <hr>
@@ -492,6 +503,41 @@
         // document.body.appendChild( stats.dom );
 
         onWindowResize();
+        setUpSpeedSlider();
+      }
+
+      function setUpButtons() {
+
+      }
+
+      function setUpSpeedSlider() {
+        var speedSlider = $('.speed-slider');
+
+        speedSlider.on('input', function(e) {
+          var val = speedSlider.val();
+
+          //The slider component gives values between zero and 100, but we don't want it
+          //to give totally linear values, so we map into two different ranges: when between
+          //0 and 'threshold' the values are between max and firstRangeMax; when between 'threshold'
+          // and 'sliderMax' the values are between firstRangeMax and min. The range endpoints are
+          //reversed because we are changing 'stepTime', but from the user's perspective
+          //the slider measures speed.
+          var sliderMax = 100;
+          var threshold = 30;
+          var min = 25;
+          var firstRangeMax = 700;
+          var max = 3000;
+
+          if (val > threshold) {
+            var scale = 1 - ((val-threshold)/(sliderMax - threshold));
+            stepTime = min + (firstRangeMax - min)*scale;
+          } else {
+            var scale = 1 - (val / threshold);
+            stepTime = firstRangeMax + (max - firstRangeMax)*scale;
+          }
+        });
+
+        speedSlider.val(40);
       }
 
       function textureFromFloats(gl,width,height,float32Array) 
