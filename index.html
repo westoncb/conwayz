@@ -384,10 +384,8 @@
         <canvas id='canvas'></canvas>
         <div class='control-bar'>
           <div class='button-section'>
-            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-play'></span></button>
-            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-pause'></span></button>
-            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-step-backward'></span></button>
-            <button class='control-btn btn btn-primary'><span class='glyphicon glyphicon-step-forward'></span></button>
+            <button class='play-btn control-btn btn btn-primary'><span class='glyphicon glyphicon-play'></span></button>
+            <button class='pause-btn control-btn btn btn-primary'><span class='glyphicon glyphicon-pause'></span></button>
           </div>
           <div class='speed-section'>
             <span>Speed:</span>
@@ -438,6 +436,7 @@
       var gl;
       var ROW_SIZE = 256;
       var COL_SIZE = 256;
+      var playing = true;
 
       //A three dimensional array. Holds an array of 'row' arrays, each
       //element of which is a four component array carrying data for a
@@ -494,28 +493,31 @@
 
         mesh = new THREE.Mesh( geometry, material );
         scene.add( mesh );
-        canvas.addEventListener( 'mousemove', onMouseMove );
-        window.addEventListener( 'resize', onWindowResize );
-        // document.body.appendChild( canvas );
+        window.addEventListener( 'resize', updateCenterColumnSize );
         controls = new THREE.OrbitControls( camera, canvas );
         controls.enableZoom = true;
         stats = new Stats();
         // document.body.appendChild( stats.dom );
 
-        onWindowResize();
+        updateCenterColumnSize();
         setUpSpeedSlider();
+        setUpButtons();
       }
 
       function setUpButtons() {
+        $('.pause-btn').click(function(e) {
+          playing = false;
+        }); 
+        $('.play-btn').click(function(e) {
+          playing = true;
+        });
 
       }
 
       function setUpSpeedSlider() {
         var speedSlider = $('.speed-slider');
 
-        speedSlider.on('input', function(e) {
-          var val = speedSlider.val();
-
+        var uupdateStateTime = function(sliderVal) {
           //The slider component gives values between zero and 100, but we don't want it
           //to give totally linear values, so we map into two different ranges: when between
           //0 and 'threshold' the values are between max and firstRangeMax; when between 'threshold'
@@ -528,16 +530,22 @@
           var firstRangeMax = 700;
           var max = 3000;
 
-          if (val > threshold) {
-            var scale = 1 - ((val-threshold)/(sliderMax - threshold));
+          if (sliderVal > threshold) {
+            var scale = 1 - ((sliderVal-threshold)/(sliderMax - threshold));
             stepTime = min + (firstRangeMax - min)*scale;
           } else {
-            var scale = 1 - (val / threshold);
+            var scale = 1 - (sliderVal / threshold);
             stepTime = firstRangeMax + (max - firstRangeMax)*scale;
           }
+        }
+
+        speedSlider.on('input', function(e) {
+          var val = speedSlider.val();
+          uupdateStateTime(val);
         });
 
-        speedSlider.val(40);
+        speedSlider.val(20)
+        uupdateStateTime(speedSlider.val());
       }
 
       function textureFromFloats(gl,width,height,float32Array) 
@@ -690,52 +698,6 @@
         return -(end-start)/2 * (Math.cos(Math.PI*t) - 1) + start;
       }
 
-      function update(timestamp) {
-        stats.begin();
-
-        var delta = clock.getDelta();
-        var deltaMillis = delta*1000;
-        
-        updateGame(deltaMillis);
-        
-
-        controls.update( delta );
-        if ( camera.position.y < 0 ) camera.position.y = 0;
-        material.uniforms.iResolution.value = new THREE.Vector2( canvas.width, canvas.height );
-        material.uniforms.cameraPos.value = camera.getWorldPosition();
-        material.uniforms.cameraDir.value = camera.getWorldDirection();
-        material.uniforms.stepCompletion.value = stepCompletion;
-
-        render (delta)
-      }
-
-      function updateGame(deltaMillis) {
-        timeSinceGameUpdate += deltaMillis;
-
-        if (timeSinceGameUpdate > stepTime) {
-          stepConwaysGame(grid);
-          timeSinceGameUpdate = 0;
-        }
-
-        stepCompletion = sinEase(timeSinceGameUpdate / stepTime, 0, 1);
-
-        updateDataTextureFromGrid(grid);
-
-        if (toggledCells !== undefined) {
-          for (var i = 0; i < toggledCells.length; i+= 2) {
-            var row = toggledCells[i];
-            var col = toggledCells[i+1];
-
-            var target = grid[row][col][0];
-            var initial = target === 1 ? 0 : 1;
-            var completionRatio = (timeSinceGameUpdate / stepTime);
-            grid[row][col][1] = initial + (target - initial)*stepCompletion;
-
-            grid[row][col][2] = 1;
-          }
-        }
-      }
-
       function setupConfigFileDropdown() {
         $.ajax({
           //This will retrieve the contents of the folder if the folder is configured as 'browsable'
@@ -801,6 +763,10 @@
         });
 
         $('.config-description-body').html(commentText);
+
+        //The column displaying comment text may resize here, so
+        //we need to update the size of the center column too
+        updateCenterColumnSize();
       }
 
       function copyConfigGridIntoGrid(configWidth, configHeight, configGrid, grid) {
@@ -998,20 +964,62 @@
         rawFile.send(null);
       }
 
+      function update(timestamp) {
+        stats.begin();
+
+        var delta = clock.getDelta();
+        var deltaMillis = delta*1000;
+        
+        if (playing) {
+          updateGame(deltaMillis);
+        }
+
+        controls.update( delta );
+        if ( camera.position.y < 0 ) camera.position.y = 0;
+        material.uniforms.iResolution.value = new THREE.Vector2( canvas.width, canvas.height );
+        material.uniforms.cameraPos.value = camera.getWorldPosition();
+        material.uniforms.cameraDir.value = camera.getWorldDirection();
+        material.uniforms.stepCompletion.value = stepCompletion;
+
+        render (delta)
+      }
+
       function render(delta) {
         renderer.render( scene, dummyCamera );
         stats.end();
         requestAnimationFrame( update );
       }
 
-      function onMouseMove( e ) {
-        mouse.x = e.offsetX / canvas.width;
-        mouse.y = e.offsetY / canvas.height;
+      function updateGame(deltaMillis) {
+        timeSinceGameUpdate += deltaMillis;
+
+        if (timeSinceGameUpdate > stepTime) {
+          stepConwaysGame(grid);
+          timeSinceGameUpdate = 0;
+        }
+
+        stepCompletion = sinEase(timeSinceGameUpdate / stepTime, 0, 1);
+
+        updateDataTextureFromGrid(grid);
+
+        if (toggledCells !== undefined) {
+          for (var i = 0; i < toggledCells.length; i+= 2) {
+            var row = toggledCells[i];
+            var col = toggledCells[i+1];
+
+            var target = grid[row][col][0];
+            var initial = target === 1 ? 0 : 1;
+            var completionRatio = (timeSinceGameUpdate / stepTime);
+            grid[row][col][1] = initial + (target - initial)*stepCompletion;
+
+            grid[row][col][2] = 1;
+          }
+        }
       }
 
       var timeoutEvent;
 
-      function onWindowResize( e) {
+      function updateCenterColumnSize(e) {
         doResize();
 
         clearTimeout(timeoutEvent);
@@ -1042,7 +1050,7 @@
         //component size (which we would prefer to be resized automatically through CSS).
         //Flexbox is resizing the canvas' container, and we want the width of the canvas
         //to match the container width—but there is some timing issue or something with
-        //retreiving the width (which is why we use a delay in 'onWindowResize'). The most
+        //retreiving the width (which is why we use a delay in 'updateCenterColumnSize'). The most
         //this has done is mitigate the issue; the layout remains imperfect.
         renderer.setSize(width, canvasHeight);
       }
