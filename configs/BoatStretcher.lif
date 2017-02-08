@@ -1,0 +1,16 @@
+#CBoat stretcher
+#C
+#CA spaceship stretches these potential fuses. By Hartmut Holzwart, 1993.
+#C
+#CIn this version, a c/4 eater found by Tim Coe, April 1996, burns one side.
+#C
+#CSee also Wickstretcher.
+#C
+#CFrom a patterns collection by Alan Hensel
+x = 50, y = 26
+10bo$9boo$9bobo3bo$13boo$14bobbo$12boobobbo$8b3oboo4bo$7bobbo4bo$6bo4b
+o4boo$boo3bo5boboboo$oo4boo9bo$bbo5bo9bo$5boobbo6b3o$3boboo11bobo$3boo
+4bo9bobo$bbobbobo12bobo$8boobbo8bobo$4bo3b3obo9bobo11boo5bob3o$5boo4b
+3o9bobo10boboboobo4boo$14bo9bobo9bobobobb7o$13boo10bobo9b3o7bo$26bobob
+oboobbo3b3o4b3o$27bo4boobbo3boo7bo$28bo6b3o9bo$30boo4bobo8bo$30boo5bob
+o8boo!

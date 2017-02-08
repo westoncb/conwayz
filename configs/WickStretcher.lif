@@ -1,0 +1,12 @@
+#CA c/4 spaceship pulls a line of ants (a wick) which is attached to a stabilizing oscillator. Both halves were found by computer search by
+#CDean Hickerson in 1992.
+#C
+#CFrom a patterns collection by Alan Hensel
+x = 49, y = 16
+17boo$13boo4bo$12b3obo$oboobboo3bo3b4obobo4boo7boo$o4boobbo8bob3o4bo4b
+oobobboboobo$oboo4booboo4bo11bo3bobobooboboo$6bo7bo13boo5bobbobo3boo$
+5bo9bobo4b3o3bo4bobbobob3o3bo$5bo9bobo4b3oboobobboobobo3bobboobo$6bo7b
+o13boobo3boo4boo4bo$oboo4booboo4bo10bo8boobobobooboo$o4boobbo8bob3o8bo
+3bo3boobobbobo$oboobboo3bo3b4obobo7bobo3boo4bobbobo$12b3obo14bo5bob3o
+4bo$13boo4bo17bobo$17boo19bo!
+Wickstretcher
