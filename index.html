@@ -176,7 +176,7 @@
         vec3 albedo = vec3(r, g, b);
 
         if (cellBorn) {
-          float colorScale = smoothstep(.1, .9, scaleFactor);
+          float colorScale = smoothstep(.05, .9, scaleFactor);
           albedo = vec3(r*(colorScale), g, b*(colorScale));
         } else if (cellDying) {
           float colorScale = smoothstep(.2, .65, scaleFactor);
