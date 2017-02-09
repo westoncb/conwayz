@@ -179,7 +179,7 @@
           float colorScale = smoothstep(.1, .9, scaleFactor);
           albedo = vec3(r*(colorScale), g, b*(colorScale));
         } else if (cellDying) {
-          float colorScale = smoothstep(.3, .65, scaleFactor);
+          float colorScale = smoothstep(.2, .65, scaleFactor);
           albedo = vec3(r*colorScale, g*colorScale, b*colorScale);
         }
 
