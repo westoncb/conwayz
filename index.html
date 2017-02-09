@@ -554,6 +554,8 @@
         var speedSlider = $('.speed-slider');
 
         var uupdateStateTime = function(sliderVal) {
+          var oldStepRatio = timeSinceGameUpdate / stepTime;
+
           //The slider component gives values between zero and 100, but we don't want it
           //to give totally linear values, so we map into two different ranges: when between
           //0 and 'threshold' the values are between max and firstRangeMax; when between 'threshold'
@@ -573,6 +575,8 @@
             var scale = 1 - (sliderVal / threshold);
             stepTime = firstRangeMax + (max - firstRangeMax)*scale;
           }
+
+          timeSinceGameUpdate = oldStepRatio * stepTime;
         }
 
         speedSlider.on('input', function(e) {
