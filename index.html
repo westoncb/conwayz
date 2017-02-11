@@ -92,6 +92,14 @@
       var COL_SIZE = 256;
       var playing = false;
 
+      //Used for toggling cells in the scene by clicking on them
+      //i.e. 'edit mode'
+      var pixelData = new Float32Array(4);
+      var hoverCell = new THREE.Vector2();
+      var editModeActive = false;
+      var pauseAtNextStep = false;
+      var pauseDelayRemaining = 0;
+
       //A three dimensional array. Holds an array of 'row' arrays, each
       //element of which is a four component array carrying data for a
       //particular cell in the grid. The four components are:
@@ -106,6 +114,8 @@
       var stepTime = 500;
       var stepCompletion = 0;
       var configFileList = [];
+      var mousePos = new THREE.Vector2();
+      var renderTarget;
 
       init();
       update();
@@ -125,6 +135,15 @@
         renderer.setPixelRatio( window.devicePixelRatio );
         gl = renderer.getContext();
 
+        var renderTargetParams = {
+          minFilter:THREE.NearestFilter,
+          stencilBuffer:false,
+          depthBuffer:false,
+          format: THREE.RGBAFormat,
+          type: THREE.FloatType
+        }
+        renderTarget = new THREE.WebGLRenderTarget( 1, 1, renderTargetParams );
+
         loadShader('shaders/vertex.js', 'vertex');
         loadShader('shaders/fragment.js', 'fragment');
 
@@ -132,11 +151,14 @@
         controls = new THREE.OrbitControls( camera, canvas );
         controls.enableZoom = true;
         stats = new Stats();
-        // document.body.appendChild( stats.dom );
+        document.body.appendChild( stats.dom );
+
+        
 
         updateCenterColumnSize();
         setUpSpeedSlider();
         setUpButtons();
+        setUpEditModeEvents();
       }
 
       function setUpButtons() {
@@ -186,6 +208,54 @@
         updateStepTime(speedSlider.val());
       }
 
+      function setUpEditModeEvents() {
+        $('canvas').mousemove(function(e) {
+          mousePos.x = e.offsetX;
+          mousePos.y = canvas.height - e.offsetY;          
+        });
+
+        $(document).keydown(function(e) {
+          if (e.which === 16) {
+            editModeActive = true;
+            pauseAtNextStep = true;
+            pauseDelayRemaining = stepTime - timeSinceGameUpdate;
+            controls.enabled = false;
+          }
+        });
+
+        $(document).keyup(function(e) {
+          if (e.which === 16) {
+            editModeActive = false;
+            playing = true;
+            pauseAtNextStep = false;
+            controls.enabled = true;
+          }
+        });
+
+        $('canvas').click(function(e) {
+          if (editModeActive) {
+            var col = hoverCell.x + ROW_SIZE/2;
+            var row = (hoverCell.y + COL_SIZE/2);
+
+            var cell = grid[row][col];
+
+            if (cell[0] === 1) {
+              cell[0] = 0;
+              cell[1] = 0;
+              cell[2] = 1;
+              cell[3] = 0;
+            } else {
+              cell[0] = 1;
+              cell[1] = 1;
+              cell[2] = 0;
+              cell[3] = 0;
+            }
+
+            updateDataTextureFromGrid(grid);
+          }
+        });
+      }
+
       function shadersFinishedLoading() {
         initMaterial();
         initGrid();
@@ -205,7 +275,10 @@
             cameraDir:  { value: camera.getWorldDirection() },
             offsets: {type: "fv", value: theOffsets},
             tex: {type: "t", value: texture},
-            stepCompletion: {value: stepCompletion}
+            stepCompletion: {value: stepCompletion},
+            mousePos: {value: mousePos},
+            pickPass: {value: false},
+            hoverCell: {value: hoverCell}
           },
           vertexShader: shaders['vertex'],
           fragmentShader: shaders['fragment']
@@ -636,6 +709,15 @@
 
         var delta = clock.getDelta();
         var deltaMillis = delta*1000;
+
+        if (pauseAtNextStep) {
+          pauseDelayRemaining -= deltaMillis;
+
+          if (pauseDelayRemaining <= 0) {
+            pauseAtNextStep = false;
+            playing = false;
+          }
+        }
         
         if (playing) {
           updateGame(deltaMillis);
@@ -648,13 +730,40 @@
           material.uniforms.cameraPos.value = camera.getWorldPosition();
           material.uniforms.cameraDir.value = camera.getWorldDirection();
           material.uniforms.stepCompletion.value = stepCompletion;
+          material.uniforms.mousePos.value = mousePos;
         }
 
         render (delta)
       }
 
       function render(delta) {
-        renderer.render( scene, dummyCamera );
+        if (material) {
+
+          //In edit mode we make two rendering passes. The first one renders
+          //the scene as usual, the second renders to a one pixel texture
+          //which, after the pass, will contain the cell index which the
+          //cursor is presently hovering over. The same shader is used,
+          //but the uniform 'pickPass' causes it to behave differently
+          //on this other pass.
+          if (editModeActive) {
+            material.uniforms.pickPass.value = false;
+            renderer.render(scene, dummyCamera);
+            material.uniforms.pickPass.value = true;
+            renderer.render(scene, dummyCamera, renderTarget);
+
+            gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.FLOAT, pixelData);
+            hoverCell.x = pixelData[0];
+            hoverCell.y = pixelData[1];
+            material.uniforms.hoverCell.value = hoverCell;
+          } else {
+            hoverCell.x = -99999;
+            hoverCell.y = -99999;
+            material.uniforms.pickPass.value = false;
+            material.uniforms.hoverCell.value = hoverCell;
+            renderer.render(scene, dummyCamera);
+          }
+        }
+
         stats.end();
         requestAnimationFrame( update );
       }

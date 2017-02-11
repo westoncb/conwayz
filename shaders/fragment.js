@@ -1,6 +1,7 @@
 precision highp float;
 
 uniform vec2 iResolution;
+uniform vec2 mousePos;
 uniform vec3 cameraPos;
 uniform vec3 cameraDir;
 uniform float stepCompletion;
@@ -14,8 +15,11 @@ const float INTERSECTION_PRECISION = .001; // precision of the intersection
 const int NUM_OF_TRACE_STEPS = 200;
 const float FUDGE_FACTOR = .65; // Default is 1, reduce to fix overshoots
 uniform sampler2D tex;
+uniform bool pickPass;
+uniform vec2 hoverCell;
 bool cellDying = false;
 bool cellBorn = false;
+vec2 cellIndex;
 
 const vec3 BACKGROUND_COLOR = vec3(0., 0., 0.);
 
@@ -144,6 +148,8 @@ Model roundBox( vec3 p, vec3 dimensions, float radius )
   float g = 0.4;
   float b = 0.5;
 
+  cellIndex = vec2(index.x, index.y);
+
   index.x /= row_size;
   index.y /= col_size;
 
@@ -192,7 +198,7 @@ float fPlane(vec3 p, vec3 n, float distanceFromOrigin) {
 
 Model map(vec3 rayVec) {
   Model boxModel = roundBox(rayVec, box, bevel);
-  Model planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 1.0), vec3(0.4, 0.5, 0.6), 0.12, 0.);
+  Model planeModel = Model(fPlane(rayVec, vec3(0.0, 1.0, 0.0), 0.8), vec3(0.4, 0.5, 0.6), 0.12, 0.);
 
   if (planeModel.dist < boxModel.dist) {
     return planeModel;
@@ -229,7 +235,7 @@ Hit raymarch(CastRay castRay){
   vec3 cDir  = cameraDir;
   vec3 cSide = normalize( cross( cDir, vec3( 0.0, 1.0 ,0.0 ) ) );
   vec3 cUp   = normalize( cross( cSide, cDir ) );
-  float targetDepth = 1.3;
+  float targetDepth = 1.6;
   
   Ray ray = Ray(castRay.origin, castRay.direction, 0.);
 
@@ -317,6 +323,12 @@ void shadeSurface(inout Hit hit){
     );
   #endif
 
+  //The cell which the cursor is hovering over should be tinted
+  //red
+  if (cellIndex.x == hoverCell.x && cellIndex.y == hoverCell.y) {
+    color.x += 0.1;
+    color.x *= 5.;
+  }
 
   if (hit.model.id == 0.) { //It's the floor
 
@@ -354,7 +366,13 @@ vec3 linearToScreen(vec3 linearRGB) {
 
 void main()
 {
-  vec2 p = (-iResolution.xy + 2.0*gl_FragCoord.xy)/iResolution.y;
+  vec2 coord = gl_FragCoord.xy;
+
+  if (pickPass) {
+    coord = mousePos;
+  }
+
+  vec2 p = (-iResolution.xy + 2.0*coord)/iResolution.y;
   
   // create view ray
   vec3 rd = normalize( vec3(p.xy,2.0) ); // 2.0 is the lens length
@@ -372,5 +390,9 @@ void main()
   vec3 color = render(hit);
   color = linearToScreen(color);
 
-  gl_FragColor = vec4(color, 1.0);
+  if (pickPass) {
+    gl_FragColor = vec4(cellIndex, 0., 0.);
+  } else {
+    gl_FragColor = vec4(color, 1.0);
+  }
 }
