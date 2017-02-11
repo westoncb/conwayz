@@ -20,6 +20,7 @@ uniform vec2 hoverCell;
 bool cellDying = false;
 bool cellBorn = false;
 vec2 cellIndex;
+vec4 cellData;
 
 const vec3 BACKGROUND_COLOR = vec3(0., 0., 0.);
 
@@ -156,7 +157,7 @@ Model roundBox( vec3 p, vec3 dimensions, float radius )
   //In order to center the grid in our viewport
   index -= 0.5;
 
-  vec4 cellData = texture2D(tex, index);
+  cellData = texture2D(tex, index);
 
   cellDying = cellData.z == 1. && cellData.x == 0.;
   cellBorn = cellData.z == 1. && cellData.x == 1.;
@@ -324,10 +325,14 @@ void shadeSurface(inout Hit hit){
   #endif
 
   //The cell which the cursor is hovering over should be tinted
-  //red
+  //during edit mode
   if (cellIndex.x == hoverCell.x && cellIndex.y == hoverCell.y) {
-    color.x += 0.1;
-    color.x *= 5.;
+    if (cellData.x == 1.) {
+      color.x += 0.5;
+    } else {
+      color.z += 0.5;
+      color.y += 0.25;
+    }
   }
 
   if (hit.model.id == 0.) { //It's the floor
