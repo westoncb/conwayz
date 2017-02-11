@@ -116,7 +116,7 @@
       //particular cell in the grid. The four components are:
       // 0) A one or zero indicating whether the cell is live or dead.
       // 1) A scale factor for resize animations during death/birth.
-      // 2) A one if the cell's life/death state changed this turn; otherwise a one.
+      // 2) A one if the cell's life/death state changed this turn; otherwise a zero.
       // 3) Unused at the moment.
       var grid = [];
 
@@ -179,6 +179,25 @@
         $('.play-btn').click(function(e) {
           playing = true;
         });
+
+        $('.clear-btn').click(function(e) {
+          clearGrid();
+        });
+
+        $('.random-btn').click(function(e) {
+          timeSinceGameUpdate = 0;
+          loadRandomGrid();
+        });
+
+        $('.forward-btn').click(function(e) {
+          stepConwaysGame(grid);
+          if (!playing) {
+            clearCellAnimationStates();
+          }
+          updateDataTextureFromGrid(grid);
+          stepCompletion = 0.01;
+          timeSinceGameUpdate = 0.01;
+        });
       }
 
       function setUpSpeedSlider() {
@@ -232,9 +251,8 @@
         $(document).keydown(function(e) {
           if (e.which === 16) {
             editModeActive = true;
-            pauseAtNextStep = true;
-            pauseDelayRemaining = stepTime - timeSinceGameUpdate;
             controls.enabled = false;
+            initiatePauseAtNextStep();
           }
         });
 
@@ -261,6 +279,42 @@
         $('canvas').mouseup(function(e) {
           mouseButtonPressed = false;
         });
+      }
+
+      function initiatePauseAtNextStep() {
+        pauseAtNextStep = true;
+        pauseDelayRemaining = stepTime - timeSinceGameUpdate;
+      }
+
+      function clearGrid() {
+        for (var i = 0; i < grid.length; i++) {
+          var row = grid[i];
+
+          for (var j = 0; j < row.length; j++) {
+            var cell = row[j];
+            cell[0] = 0;
+            cell[1] = 0;
+            cell[2] = 0;
+            cell[3] = 0;
+          }
+        }
+
+        updateDataTextureFromGrid(grid);
+      }
+
+      function clearCellAnimationStates() {
+        for (var i = 0; i < grid.length; i++) {
+          var row = grid[i];
+
+          for (var j = 0; j < row.length; j++) {
+            var cell = row[j];
+            cell[1] = 0;
+            cell[2] = 0;
+            cell[3] = 0;
+          }
+        }
+
+        updateDataTextureFromGrid(grid);
       }
 
       function toggleCellWithCursor() {
@@ -336,6 +390,10 @@
       }
 
       function initGrid() {
+        loadRandomGrid();
+      }
+
+      function loadRandomGrid() {
         var configGrid = [];
 
         //Fill the config grid with random live and dead cells
@@ -818,7 +876,7 @@
           timeSinceGameUpdate = 0;
         }
 
-        stepCompletion = sinEase(timeSinceGameUpdate / stepTime, 0, 1);
+        calcStepCompletion();
 
         updateDataTextureFromGrid(grid);
 
@@ -835,6 +893,10 @@
             grid[row][col][2] = 1;
           }
         }
+      }
+
+      function calcStepCompletion() {
+        stepCompletion = sinEase(timeSinceGameUpdate / stepTime, 0, 1);
       }
 
       var timeoutEvent;
