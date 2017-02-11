@@ -91,11 +91,13 @@
       var ROW_SIZE = 256;
       var COL_SIZE = 256;
       var playing = false;
+      var mouseButtonPressed = false;
 
       //Used for toggling cells in the scene by clicking on them
       //i.e. 'edit mode'
       var pixelData = new Float32Array(4);
       var hoverCell = new THREE.Vector2();
+      var lastHoverCell = new THREE.Vector2();
       var editModeActive = false;
       var pauseAtNextStep = false;
       var pauseDelayRemaining = 0;
@@ -211,7 +213,18 @@
       function setUpEditModeEvents() {
         $('canvas').mousemove(function(e) {
           mousePos.x = e.offsetX;
-          mousePos.y = canvas.height - e.offsetY;          
+          mousePos.y = canvas.height - e.offsetY;
+
+          if (mouseButtonPressed && 
+            (hoverCell.x != lastHoverCell.x || hoverCell.y != lastHoverCell.y)) {
+
+            lastHoverCell.x = hoverCell.x;
+            lastHoverCell.y = hoverCell.y;
+
+            if (editModeActive) {
+              toggleCellWithCursor();
+            }
+          }
         });
 
         $(document).keydown(function(e) {
@@ -234,26 +247,40 @@
 
         $('canvas').click(function(e) {
           if (editModeActive) {
-            var col = hoverCell.x + ROW_SIZE/2;
-            var row = (hoverCell.y + COL_SIZE/2);
-
-            var cell = grid[row][col];
-
-            if (cell[0] === 1) {
-              cell[0] = 0;
-              cell[1] = 0;
-              cell[2] = 1;
-              cell[3] = 0;
-            } else {
-              cell[0] = 1;
-              cell[1] = 1;
-              cell[2] = 0;
-              cell[3] = 0;
-            }
-
-            updateDataTextureFromGrid(grid);
+            toggleCellWithCursor();
           }
         });
+
+        $('canvas').mousedown(function(e) {
+          mouseButtonPressed = true;
+        });
+
+        $('canvas').mouseup(function(e) {
+          mouseButtonPressed = false;
+        });
+      }
+
+      function toggleCellWithCursor() {
+
+        var col = hoverCell.x + ROW_SIZE/2;
+        var row = (hoverCell.y + COL_SIZE/2);
+
+        var cell = grid[row][col];
+        
+
+        if (cell[0] === 1) {
+          cell[0] = 0;
+          cell[1] = 0;
+          cell[2] = 1;
+          cell[3] = 0;
+        } else {
+          cell[0] = 1;
+          cell[1] = 1;
+          cell[2] = 0;
+          cell[3] = 0;
+        }
+
+        updateDataTextureFromGrid(grid);
       }
 
       function shadersFinishedLoading() {
