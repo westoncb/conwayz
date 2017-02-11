@@ -29,6 +29,11 @@
               <span class='bolded'>Tilt camera:</span>
               Left click and drag.
             </div>
+
+            <div class='controls-subsection'>
+              <span class='bolded'>Toggle tiles:</span>
+              Hold shift and click (or click and drag).
+            </div>
           </span>
         </div>
         <hr>
@@ -97,10 +102,10 @@
       //i.e. 'edit mode'
       var pixelData = new Float32Array(4);
       var hoverCell = new THREE.Vector2();
-      var lastHoverCell = new THREE.Vector2();
       var editModeActive = false;
       var pauseAtNextStep = false;
       var pauseDelayRemaining = 0;
+      var cellsModifiedThisDrag = [];
 
       //A three dimensional array. Holds an array of 'row' arrays, each
       //element of which is a four component array carrying data for a
@@ -215,15 +220,8 @@
           mousePos.x = e.offsetX;
           mousePos.y = canvas.height - e.offsetY;
 
-          if (mouseButtonPressed && 
-            (hoverCell.x != lastHoverCell.x || hoverCell.y != lastHoverCell.y)) {
-
-            lastHoverCell.x = hoverCell.x;
-            lastHoverCell.y = hoverCell.y;
-
-            if (editModeActive) {
-              toggleCellWithCursor();
-            }
+          if (editModeActive && mouseButtonPressed) {
+            toggleCellWithCursor();
           }
         });
 
@@ -253,6 +251,7 @@
 
         $('canvas').mousedown(function(e) {
           mouseButtonPressed = true;
+          cellsModifiedThisDrag = [];
         });
 
         $('canvas').mouseup(function(e) {
@@ -262,8 +261,20 @@
 
       function toggleCellWithCursor() {
 
-        var col = hoverCell.x + ROW_SIZE/2;
         var row = (hoverCell.y + COL_SIZE/2);
+        var col = hoverCell.x + ROW_SIZE/2;
+
+        for (var i = 0; i < cellsModifiedThisDrag.length; i+=2) {
+          var aRow = cellsModifiedThisDrag[i];
+          var aCol = cellsModifiedThisDrag[i+1];
+
+          if (row === aRow && col === aCol) {
+            return;
+          }
+        }
+        
+        cellsModifiedThisDrag.push(row);
+        cellsModifiedThisDrag.push(col);
 
         var cell = grid[row][col];
         
