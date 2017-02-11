@@ -79,6 +79,7 @@ hr {
   border: 1px solid #555;
   flex-shrink: 1;
   flex-grow: 1;
+  outline: none;
 }
 
 .control-bar {

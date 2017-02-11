@@ -32,7 +32,7 @@
 
             <div class='controls-subsection'>
               <span class='bolded'>Add/remove tiles:</span>
-              Tap spacebar to enter edit mode. If you click an empty space, a tile will be added; if you click a tile, it will be removed. Tap spacebar again to leave edit mode.
+              Tap the shift key to enter edit mode. If you click an empty space, a tile will be added; if you click a tile, it will be removed. Tap shift again to leave edit mode.
             </div>
           </span>
         </div>
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class='center-column'>
-        <canvas id='canvas'></canvas>
+        <canvas id='canvas' tabindex=0></canvas>
         <div class='control-bar'>
           <div class='button-section'>
             <button class='play-btn control-btn btn btn-primary'><span class='glyphicon glyphicon-play'></span></button>
@@ -250,7 +250,7 @@
         });
 
         $(document).keyup(function(e) {
-          if (e.which === 32) { //Spacebar
+          if (e.which === 16) { //Shift key
             editModeActive = !editModeActive;
 
             if (editModeActive) {
@@ -262,6 +262,7 @@
         });
 
         $('canvas').click(function(e) {
+          $('canvas').focus();
           if (editModeActive) {
             toggleCellWithCursor();
           }
