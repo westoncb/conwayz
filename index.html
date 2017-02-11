@@ -110,6 +110,7 @@
       var pauseAtNextStep = false;
       var pauseDelayRemaining = 0;
       var cellsModifiedThisDrag = [];
+      var playingBeforeEditMode = true;
 
       //A three dimensional array. Holds an array of 'row' arrays, each
       //element of which is a four component array carrying data for a
@@ -251,6 +252,7 @@
         $(document).keydown(function(e) {
           if (e.which === 16) {
             editModeActive = true;
+            playingBeforeEditMode = playing;
             controls.enabled = false;
             initiatePauseAtNextStep();
           }
@@ -259,7 +261,7 @@
         $(document).keyup(function(e) {
           if (e.which === 16) {
             editModeActive = false;
-            playing = true;
+            playing = playingBeforeEditMode;
             pauseAtNextStep = false;
             controls.enabled = true;
           }
