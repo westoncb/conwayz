@@ -328,7 +328,7 @@ void shadeSurface(inout Hit hit){
   //during edit mode
   if (cellIndex.x == hoverCell.x && cellIndex.y == hoverCell.y) {
     if (cellData.x == 1.) {
-      color.x += 0.5;
+      color.x += 0.7;
     } else {
       color.z += 0.5;
       color.y += 0.25;
