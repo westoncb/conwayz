@@ -86,6 +86,7 @@ hr {
   align-items: stretch;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 2px;
+  justify-content: space-between;
   height: 40px;
   max-height: 40px;
   min-width: 0px;
@@ -104,7 +105,13 @@ hr {
 .control-btn {
   margin-right: 5px;
   font-size: 1.2em !important;
-  padding: 2px 10px 0px 10px !important;
+  padding: 2px 5px 0px 5px !important;
+}
+
+.control-txt-btn {
+  margin-right: 5px;
+  font-size: 1.2em !important;
+  padding: 0px 5px 1px 5px !important;
 }
 
 .btn:focus,.btn:active {
@@ -120,16 +127,19 @@ hr {
 }
 
 .speed-section {
-  flex-shrink: 1;
-  flex-grow: 1;
   display: flex;
+  min-width: 50px;
+  flex-shrink: 2;
+  flex-grow: 0.5;
   align-items: center;
   justify-content: flex-end;
   flex-direction: row;
+  margin-left: 5px;
 }
 
 .speed-slider {
   max-width: 250px;
+  min-width: 50px;
   margin-left: 10px;
 }
 
@@ -223,6 +233,10 @@ li {
   justify-content: flex-start;
   max-width: 250px;
   padding-bottom: 10px;
+}
+
+.small-btn-txt {
+  font-size: .8em;
 }
 
 .subtitle {
