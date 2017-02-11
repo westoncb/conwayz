@@ -31,8 +31,8 @@
             </div>
 
             <div class='controls-subsection'>
-              <span class='bolded'>Toggle tiles:</span>
-              Hold shift and click (or click and drag).
+              <span class='bolded'>Add/remove tiles:</span>
+              Tap spacebar to enter edit mode. If you click an empty space, a tile will be added; if you click a tile, it will be removed. Tap spacebar again to leave edit mode.
             </div>
           </span>
         </div>
@@ -249,21 +249,15 @@
           }
         });
 
-        $(document).keydown(function(e) {
-          if (e.which === 16) {
-            editModeActive = true;
-            playingBeforeEditMode = playing;
-            controls.enabled = false;
-            initiatePauseAtNextStep();
-          }
-        });
-
         $(document).keyup(function(e) {
-          if (e.which === 16) {
-            editModeActive = false;
-            playing = playingBeforeEditMode;
-            pauseAtNextStep = false;
-            controls.enabled = true;
+          if (e.which === 32) { //Spacebar
+            editModeActive = !editModeActive;
+
+            if (editModeActive) {
+              beginEditMode();
+            } else {
+              endEditMode();
+            }
           }
         });
 
@@ -281,6 +275,20 @@
         $('canvas').mouseup(function(e) {
           mouseButtonPressed = false;
         });
+      }
+
+      function beginEditMode() {
+        editModeActive = true;
+        playingBeforeEditMode = playing;
+        controls.enabled = false;
+        initiatePauseAtNextStep(); 
+      }
+
+      function endEditMode() {
+        editModeActive = false;
+        playing = playingBeforeEditMode;
+        pauseAtNextStep = false;
+        controls.enabled = true;
       }
 
       function initiatePauseAtNextStep() {
