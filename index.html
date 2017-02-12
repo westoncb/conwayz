@@ -177,10 +177,12 @@
 
       function setUpButtons() {
         $('.pause-btn').click(function(e) {
-          playing = false;
-        }); 
+          pause();
+        });
+
+        $('.play-btn').css('opacity', '0.5');
         $('.play-btn').click(function(e) {
-          playing = true;
+          play();
         });
 
         $('.clear-btn').click(function(e) {
@@ -217,6 +219,18 @@
           stepCompletion = 0.01;
           timeSinceGameUpdate = stepCompletion * stepTime;
         });
+      }
+
+      function play() {
+        playing = true;
+        $('.pause-btn').css('opacity', '1');
+        $('.play-btn').css('opacity', '0.5');
+      }
+
+      function pause() {
+        playing = false;
+        $('.pause-btn').css('opacity', '0.5');
+        $('.play-btn').css('opacity', '1');
       }
 
       function setUpSpeedSlider() {
@@ -267,15 +281,15 @@
           }
         });
 
+        $(document).keydown(function(e) {
+          if (e.which === 16) { //Shift key
+            beginEditMode();
+          }
+        });
+
         $(document).keyup(function(e) {
           if (e.which === 16) { //Shift key
-            editModeActive = !editModeActive;
-
-            if (editModeActive) {
-              beginEditMode();
-            } else {
-              endEditMode();
-            }
+            endEditMode();
           }
         });
 
@@ -316,12 +330,14 @@
         editModeActive = true;
         playingBeforeEditMode = playing;
         controls.enabled = false;
-        initiatePauseAtNextStep(); 
+        initiatePauseAtNextStep();
       }
 
       function endEditMode() {
         editModeActive = false;
-        playing = playingBeforeEditMode;
+        if (playingBeforeEditMode) {
+          play();
+        }
         pauseAtNextStep = false;
         controls.enabled = true;
       }
@@ -867,7 +883,7 @@
 
           if (pauseDelayRemaining <= 0) {
             pauseAtNextStep = false;
-            playing = false;
+            pause();
           }
         }
         
