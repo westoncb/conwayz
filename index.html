@@ -95,8 +95,8 @@
       var canvas;
       var stats;
       var clock = new THREE.Clock();
-      var texture;
-      var gl;
+      var texture; //OpenGL texture used to pass grid data to the shader
+      var gl; //OpenGL context object
       var ROW_SIZE = 256;
       var COL_SIZE = 256;
       var playing = false;
@@ -123,7 +123,9 @@
       // 3) Unused at the moment.
       var grid = [];
 
-      var toggledCells = [];
+      //Tracks cells that switched from dead to alive (or the
+      //reverse) during the most recent step of the game.
+      var toggledCells = []; 
       var timeSinceGameUpdate = 0;
       var stepTime = 500;
       var stepCompletion = 0;
@@ -166,7 +168,6 @@
 
         loadShader('shaders/vertex.js', 'vertex');
         loadShader('shaders/fragment.js', 'fragment');
-
         
         controls = new THREE.OrbitControls( camera, canvas );
         controls.enableZoom = true;
@@ -615,7 +616,7 @@
 
       function setUpConfigFileDropdown() {
         $.ajax({
-          //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+          //Retrieve a list of the files/folders at the given url
           url: './configs',
           success: function (data) {
             $(data).find("a:contains(" + ".l" + ")").each(function() {
@@ -648,7 +649,7 @@
       }
 
       function fileNameOnly(path) {
-        return path.substring(path.lastIndexOf('/')+1);
+        return path.substring(path.lastIndexOf('/')+1, path.lastIndexOf('.'));
       }
 
       function loadNewConwaysConfig(text) {
