@@ -127,7 +127,7 @@
       //reverse) during the most recent step of the game.
       var toggledCells = []; 
       var timeSinceGameUpdate = 0;
-      var stepTime = 500;
+      var stepTime = 1; //This value will be overriden in setUpSpeedSlider()
       var stepCompletion = 0;
       var configFileList = [];
       var mousePos = new THREE.Vector2();
@@ -140,7 +140,6 @@
           setUpConfigFileDropdown();
           setUpSpeedSlider();
           setUpButtons();
-          setUpEditModeEvents();
           doMobileDifferingSetup();
         });
       }
@@ -149,8 +148,7 @@
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera();
         dummyCamera = new THREE.Camera();
-        camera.position.set(0, 291.5, 0);
-        camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+        camera.position.set(-21.6, 77.503, 186.829);
         geometry = new THREE.PlaneBufferGeometry( 2.0, 2.0 );
         canvas = document.getElementById("canvas");
         renderer = new THREE.WebGLRenderer({ canvas: canvas });
@@ -170,6 +168,7 @@
         loadShader('shaders/fragment.js', 'fragment');
         
         controls = new THREE.OrbitControls( camera, canvas );
+        controls.target = new THREE.Vector3(2.645, -54.83, 36.876);
         controls.enableZoom = true;
         stats = new Stats();
       }
@@ -266,7 +265,7 @@
           updateStepTime(val);
         });
 
-        speedSlider.val(20)
+        speedSlider.val(75) //set initial value
         updateStepTime(speedSlider.val());
       }
 
@@ -1050,6 +1049,14 @@
           initThreejs();
           updateCenterColumnSize();
           window.addEventListener( 'resize', updateCenterColumnSize );
+
+          //Load an initial pattern
+          var path = './configs/BlockPuffer.l';
+          readTextFile(path, loadNewConwaysConfig);
+          $('.config-title').text(fileNameOnly(path));
+
+          setUpEditModeEvents();
+
           update();
         }
       }
