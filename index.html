@@ -4,12 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Sahitya" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Bitter:400,700" rel="stylesheet">
     <link rel="stylesheet" href="style.css" type="text/css">
   </head>
   <body>
 
-    <span class='title'><span class='big-c'>C</span>onwayz</span><span class='subtitle'>—"The vital, Conwaysian cellular automaton we all know and love."</span>
+    <div class='title-block'>
+      <span class='title'><span class='big-c'>C</span>onwayz</span><span class='subtitle'>—"A new rendition of Conway's vital cellular automaton."</span>
+    </div>
     <div class='main-container'>
       <div class='left-column side-column'>
         <div class='controls-section column-section'>
@@ -32,7 +34,7 @@
 
             <div class='controls-subsection'>
               <span class='bolded'>Add/remove tiles:</span>
-              Hold shift and click on empty spaces to add tiles, or on existing tiles to remove. (You can also click and drag to 'paint' with tiles. And you can tap 'e' to enter or exit this editing mode, if you'd prefer not to hold shift.)
+              Hold shift and click on empty spaces to add tiles, or click on existing tiles to remove them. (You can also tap 'e' to enter or exit this editing mode, if you'd prefer not to hold shift.)
             </div>
           </span>
         </div>
@@ -40,8 +42,7 @@
         <div class='about-section column-section'>
           <span class='minor-title about-title'>About</span>
           <span class='about-text'>
-            This program was created by <a href="http://westoncb.com">Weston Beecroft</a> mostly as a way to experiment
-            with using <a href='http://9bitscience.blogspot.com/2013/07/raymarching-distance-fields_14.html'>raymarching</a> to do something practical. It has a pretty minimal feature set at the moment, but I may add to it in the near feature. You can contact me at <i>westoncb at Google's mail service</i>. The source is <a href='https://github.com/westoncb/conwayz'>available on Github</a>.
+            This program was created by <a href="http://westoncb.com">Weston Beecroft</a> mostly because he enjoys seeing abstract things made innapropriately concrete, and thought it would be quicker than it actually was to apply this to <a href='https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life'>Conway's Game of Life</a>. The source is <a href='https://github.com/westoncb/conwayz'>available on Github</a>. <b>More info on the project below!</b>
           </span>
         </div>
       </div>
@@ -69,8 +70,8 @@
           <p class='config-description-body'></p>
         </div>
       </div>
-      
     </div>
+    <hr class='main-hr'>
     
 
     <script src="lib/three.js"></script>
@@ -165,9 +166,6 @@
         controls = new THREE.OrbitControls( camera, canvas );
         controls.enableZoom = true;
         stats = new Stats();
-        document.body.appendChild( stats.dom );
-
-        
 
         updateCenterColumnSize();
         setUpSpeedSlider();
@@ -992,7 +990,7 @@
         var controlBar = $('.control-bar');
 
         var controlBarHeight = 40;
-        var freeVerticalSpace = 120;
+        var freeVerticalSpace = 150;
         var columnHeight = win.height() - freeVerticalSpace;
         var width = centerColumn.width();
         var canvasHeight = columnHeight - controlBarHeight;

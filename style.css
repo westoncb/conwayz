@@ -1,8 +1,11 @@
 body {
+  display: flex;
+  flex-direction: column;
   background-color: #AAA !important;
   margin: 0;
-  padding: 0;
-  font-family: 'Open sans', sans-serif !important;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-family: 'Bitter', serif !important;
   color: #555;
 }
 .btn-primary {
@@ -10,11 +13,11 @@ body {
   border-color: #aaa !important;
   color: #555 !important;
   border-radius: 2px !important;
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
 }
 .configs-btn {
   width: 100%;
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
   font-size: 1.1em !important;
 }
 .top-section {
@@ -53,9 +56,6 @@ hr {
   justify-content: space-around;
   align-items: stretch;
   align-content: stretch;
-  position: absolute;
-  left: 30px;
-  right: 30px;
   margin: 0;
   min-width: 980px;
 }
@@ -148,9 +148,12 @@ hr {
   background-color: #eee !important;
 }
 
+.title-block {
+  margin-bottom: -10px;
+}
+
 .title {
   color: #555;
-  margin-left: 30px;
   font-family: 'Sahitya', serif;
   font-size: 40px;
   line-height: 80px;
@@ -160,7 +163,7 @@ hr {
 }
 
 li {
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
 }
 
 .dropdown-menu {
@@ -168,14 +171,14 @@ li {
 }
 
 .minor-title {
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
   font-size: 1.5em;
   color: #555;
   text-align: center;
 }
 
 .intermediate-title {
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
   font-size: 2.0em;
   color: #555;
   text-align: center;
@@ -186,7 +189,7 @@ li {
 }
 
 .config-description-body {
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
   font-size: 1em;
   color: #555;
   line-height: 150%
@@ -194,7 +197,7 @@ li {
 
 .controls-text {
   margin-top: 10px;
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
   font-size: 1em;
   color: #555;
 }
@@ -213,7 +216,7 @@ li {
 }
 
 .about-text {
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Bitter', serif;
   font-size: .9em;
   color: #555;
   line-height: 150%
@@ -242,8 +245,7 @@ li {
 
 .subtitle {
   margin-left: 10px;
-  font-family: 'Open sans', sans-serif;
-  font-size: .9em;
+  font-family: 'Sahitya', serif;
   font-style: italic;
   color: #555;
 }
@@ -265,4 +267,10 @@ a:active {
     color: #262626;
     text-decoration: none;
     background-color: #AAA !important;
+}
+
+.main-hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  width: 20%;
 }
