@@ -32,7 +32,7 @@
 
             <div class='controls-subsection'>
               <span class='bolded'>Add/remove tiles:</span>
-              Hold shift and click on empty spaces to add tiles, or on existing tiles to remove. (You can also click and drag to 'paint' with tiles.)
+              Hold shift and click on empty spaces to add tiles, or on existing tiles to remove. (You can also click and drag to 'paint' with tiles. And you can press 'e' to enter/exit this editing mode, if you'd prefer not to hold shift.)
             </div>
           </span>
         </div>
@@ -290,6 +290,15 @@
         $(document).keyup(function(e) {
           if (e.which === 16) { //Shift key
             endEditMode();
+          } else if (e.which === 69) { //'e' key
+
+            editModeActive = !editModeActive;
+
+            if (editModeActive) {
+              beginEditMode();
+            } else {
+              endEditMode();
+            }
           }
         });
 
