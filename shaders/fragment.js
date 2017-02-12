@@ -341,8 +341,8 @@ void shadeSurface(inout Hit hit){
     //a solid color (in order to avoid aliasing from lighting
     //contribution ending abruptly at tile boundaries.)
     float ratio = smoothstep(10., 900., hit.ray.len);
-    float noise = (noise(hit.pos.xz/1.5))*2.;
-    hit.color = (1.-ratio)*color*noise + ratio*(hit.model.albedo/15.);
+    float theNoise = (noise(hit.pos.xz/1.5))*2.;
+    hit.color = (1.-ratio)*color*theNoise + ratio*(hit.model.albedo/15.);
     return;
   }
 
