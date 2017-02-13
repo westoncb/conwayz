@@ -106,6 +106,13 @@
       var configGridHistory = [];
       var maxConfigGridHistory = 1024;
 
+      //The only reason this exists is for one situation: a user paints some tiles manually, and lets the game
+      //run for a while; then they use the step back button to reach stages before they painted any tiles; if
+      //they step forward again, the tiles they painted will not reappear because they weren't added by Conway's
+      //rules. By saving grid states when stepping back, we can preserve old grid states that arose through user
+      //interaction. 
+      var configGridRedoStack = [];
+
       //Used for toggling cells in the scene by clicking on them
       //i.e. 'edit mode'
       var pixelData = new Float32Array(4);
@@ -195,30 +202,45 @@
         });
 
         $('.forward-btn').click(function(e) {
-          stepConwaysGame(grid);
-          if (!playing) {
-            clearCellAnimationStates();
-          }
-          updateDataTextureFromGrid(grid);
-          stepCompletion = 0.01;
-          timeSinceGameUpdate = stepCompletion * stepTime;
+          stepForwardAction();
         });
 
         $('.back-btn').click(function(e) {
-          if (configGridHistory.length === 0) {
-            return;
-          }
-
-          var configGrid = configGridHistory.pop();
-          copyConfigGridIntoGrid(ROW_SIZE, COL_SIZE, configGrid, grid);
-
-          if (!playing) {
-            clearCellAnimationStates();
-          }
-          updateDataTextureFromGrid(grid);
-          stepCompletion = 0.01;
-          timeSinceGameUpdate = stepCompletion * stepTime;
+          stepBackwardAction();
         });
+      }
+
+      function stepForwardAction() {
+        if (configGridRedoStack.length > 0) {
+          var configGrid = configGridRedoStack.pop();
+          copyConfigGridIntoGrid(ROW_SIZE, COL_SIZE, configGrid, grid);
+        } else {
+          stepConwaysGame(grid);
+        }
+
+        if (!playing) {
+          clearCellAnimationStates();
+        }
+        updateDataTextureFromGrid(grid);
+        stepCompletion = 0.01;
+        timeSinceGameUpdate = stepCompletion * stepTime;
+      }
+
+      function stepBackwardAction() {
+        if (configGridHistory.length === 0) {
+          return;
+        }
+
+        var configGrid = configGridHistory.pop();
+        configGridRedoStack.push(configGrid);
+        copyConfigGridIntoGrid(ROW_SIZE, COL_SIZE, configGrid, grid);
+
+        if (!playing) {
+          clearCellAnimationStates();
+        }
+        updateDataTextureFromGrid(grid);
+        stepCompletion = 0.01;
+        timeSinceGameUpdate = stepCompletion * stepTime;
       }
 
       function play() {
@@ -491,6 +513,11 @@
         saveGridStateToHistory();
         clearRecentlyToggledIndicators();
         toggledCells.length = 0;
+
+        //The redo stack is only used when stepping back and forth;
+        //once we start evolving the grid by Conway's rules again,
+        //we drop the redo stack.
+        configGridRedoStack.length = 0;
 
         for (var i = 0; i < COL_SIZE; i++) {
           for (var j = 0; j < ROW_SIZE; j++) {
