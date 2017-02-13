@@ -121,9 +121,14 @@
       //element of which is a four component array carrying data for a
       //particular cell in the grid. The four components are:
       // 0) A one or zero indicating whether the cell is live or dead.
-      // 1) A scale factor for resize animations during death/birth.
+      // 1) Unused at the moment.
       // 2) A one if the cell's life/death state changed this turn; otherwise a zero.
       // 3) Unused at the moment.
+      //Note: something seems to be depending on the fact that [2] stores the particular info.
+      //that it does in a way I haven't been able to track down. I tried switching it to be
+      //stored in [1] instead so both unused elements would be at the end (and I updated the
+      //references here and in the shader which I could find)—but the animation breaks in
+      //some strange way when I try it.
       var grid = [];
 
       //Tracks cells that switched from dead to alive (or the
