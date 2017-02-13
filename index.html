@@ -210,7 +210,7 @@
       }
 
       function stepForwardAction() {
-        if (stepId < configGridHistory.length-1) {
+        if (stepId < configGridHistory.length-1) { //load from history
           stepId++;
           var configGrid = configGridHistory[stepId];
           copyConfigGridIntoGrid(ROW_SIZE, COL_SIZE, configGrid, grid);
@@ -222,8 +222,8 @@
           clearCellAnimationStates();
         }
         updateDataTextureFromGrid(grid);
-        stepCompletion = 0.01;
-        timeSinceGameUpdate = stepCompletion * stepTime;
+        stepCompletion = 0.00;
+        timeSinceGameUpdate = 0;
       }
 
       function stepBackwardAction() {
@@ -979,22 +979,7 @@
         }
 
         calcStepCompletion();
-
         updateDataTextureFromGrid(grid);
-
-        if (toggledCells !== undefined) {
-          for (var i = 0; i < toggledCells.length; i+= 2) {
-            var row = toggledCells[i];
-            var col = toggledCells[i+1];
-
-            var target = grid[row][col][0];
-            var initial = target === 1 ? 0 : 1;
-            var completionRatio = (timeSinceGameUpdate / stepTime);
-            grid[row][col][1] = initial + (target - initial)*stepCompletion;
-
-            grid[row][col][2] = 1;
-          }
-        }
       }
 
       function calcStepCompletion() {

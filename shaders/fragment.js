@@ -162,7 +162,11 @@ Model roundBox( vec3 p, vec3 dimensions, float radius )
   cellDying = cellData.z == 1. && cellData.x == 0.;
   cellBorn = cellData.z == 1. && cellData.x == 1.;
 
-  float scaleFactor = cellData.y;
+  float scaleFactor = stepCompletion;
+
+  if (cellDying) {
+    scaleFactor = 1. - scaleFactor;
+  }
 
   //cellData.z will be a zero if it has been more than one turn since the
   //cell's life/death state changed. cellData.x holds a one when the cell
