@@ -8,4 +8,4 @@ http://westoncb.com/conwayz/
 
 ## License
 
-See the [LICENSE](LICENSE) file for license rights and limitations (Attribution-NonCommercial-ShareAlike 3.0 United States).
+See the [LICENSE](LICENSE) file for license rights and limitations (Creative Commons Attribution-NonCommercial-ShareAlike 3.0).
