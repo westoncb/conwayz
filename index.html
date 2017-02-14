@@ -73,7 +73,7 @@
     </div>
     <hr class='main-hr'>
     <div class='writeup'>
-      
+
     </div>
 
     <script src="lib/three.js"></script>
@@ -209,10 +209,12 @@
 
         $('.forward-btn').click(function(e) {
           stepForwardAction();
+          pause();
         });
 
         $('.back-btn').click(function(e) {
           stepBackwardAction();
+          pause();
         });
       }
 
