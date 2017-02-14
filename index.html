@@ -72,7 +72,9 @@
       </div>
     </div>
     <hr class='main-hr'>
-    
+    <div class='writeup'>
+      
+    </div>
 
     <script src="lib/three.js"></script>
     <script src="lib/OrbitControls.js"></script>
@@ -1060,6 +1062,10 @@
           video.css('margin-top', '10px');
           $('.title-block').after(video);
           $('.subtitle').remove();
+
+          if (isMobile()) {
+            $('.writeup').removeClass('writeup').addClass('writeup-mobile');
+          }
 
         } else {
           $('.title-block').css('margin-bottom', '-10px');

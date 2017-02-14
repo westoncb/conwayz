@@ -276,3 +276,18 @@ a:active {
   font-size: 0.8em;
   color: #666;
 }
+
+.writeup {
+  font-family: 'Bitter', serif;
+  width: 700px;
+  margin: auto;
+  font-size: 1.1em;
+  color: #555;
+}
+
+.writeup-mobile {
+  font-family: 'Bitter', serif;
+  width: 100%;
+  font-size: 1.1em;
+  color: #555;
+}
