@@ -42,7 +42,7 @@
         <div class='about-section column-section'>
           <span class='minor-title about-title'>About</span>
           <span class='about-text'>
-            This program was created by <a href="http://westoncb.com">Weston Beecroft</a> mostly because he enjoys seeing abstract things made weirdly concrete, and thought it would be quicker than it actually was to apply this to <a href='https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life'>Conway's Game of Life</a>. The source is <a href='https://github.com/westoncb/conwayz'>available on Github</a>. <b>More info on the project below!</b>
+            This program was created by <a href="http://westoncb.com">Weston Beecroft</a> partially as an experiment with raymarching, and partly just for fun. He's always thought <a href='https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life'>Conway's Game of Life</a>, and cellular automata in general, were interesting, so—why not? The source is <a href='https://github.com/westoncb/conwayz'>available on Github</a>. <b>More info on the project below!</b>
           </span>
         </div>
       </div>
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class='right-column side-column'>
-        <span class='playback-note'>(Note: you may need to zoom out and/or speed up playback to see what many of the patterns are about.)</span>
+        <span class='note'>(Note: you may need to zoom out and/or speed up playback to see what many of the patterns are about.)</span>
         <hr>
         <div class='config-description'>
           <p class='config-title minor-title'>No pattern selected</p>
@@ -1053,12 +1053,13 @@
         if (isMobile() || !Detector.webgl) {
           $('body').css('align-items', 'center');
           $('.main-container').remove();
-          var note = $('<span></span>');
+          var note = $('<span class="note"></span>');
           note.text('(Only a video is displayed since you are on mobile or have no WebGL support—otherwise you\'d see the app here.)');
           $('.title-block').after(note);
-          var video = $('<embed src="http://www.youtube.com/v/tztmgCcZaM4&amp;hl=en_US&amp;fs=1&amp;hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true">');
+          var video = $('<div style=""><iframe src="https://www.youtube.com/embed/oCTmNURs8xk?ecver=2" frameborder="0" style="" allowfullscreen></iframe></div>');
           video.css('margin-top', '10px');
           $('.title-block').after(video);
+          $('.subtitle').remove();
 
         } else {
           $('.title-block').css('margin-bottom', '-10px');
