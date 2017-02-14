@@ -247,13 +247,13 @@ li {
 }
 
 a:link {
-    color: #ddd;
+    color: #efeaff;
 }
 a:visited {
-    color: #ddd;
+    color: #efeaff;
 }
 a:hover {
-    color: #12e068 !important;
+    color: #22dd77 !important;
     text-decoration: none !important;
 }
 a:active {
@@ -282,22 +282,20 @@ a:active {
   font-family: 'Bitter', serif;
   width: 700px;
   margin: auto;
-  font-size: 1.1em;
   color: #555;
 }
 
 .writeup-mobile {
   font-family: 'Bitter', serif;
   width: 100%;
-  font-size: 1.1em;
   color: #555;
 }
 
 .screenshot {
   border: 1px solid #555;
   margin-top: 8px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%;
+
 }
 
 .sc-note {
