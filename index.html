@@ -103,7 +103,27 @@
 
       <p>The last tricky part (aside from annoying CSS things, and dealing with the fact I’d need variations for mobile)—was getting ‘picking’ working. Picking is where you go from the 2D coordinates of the pixels making up the rendered image, follow a ray into the scene, and discover which object the ray hits. In my case this was used for the ‘editing mode,’ where users can jump in and add or remove tiles. The problem in my case was that most of the application resides in javascript, including the parts that needed information about which cell the mouse was over, but the 3D to 2D projection takes place in the shader, as part of the raymarching algorithm. It’s much easier to bring information <i>into</i> a (GLSL fragment) shader than it is to bring it out. In fact, the only method I could find was to render the scene again onto an offscreen image rather than onto the WebGL canvas, and then read the pixel data back in javascript. So, after trying a number of other things, I ended up doing one more render pass on a one pixel texture; the one pixel contained the indices of the cell which the mouse was presently over (I passed the mouse position into the shader via a ‘uniform’—that’s standard though).</p>
 
-      <p>Part of what I wanted to figure out with all this is how viable it would be to use raymarching to create practical applications. My stance now is that it mostly depends on how well you know the domain. It’s specialized, there’s a lot to it. I could hack something together, but I’m sure if some of the experts on Shadertoy were to attempt something similar, the results would have been far superior. In any case, I’m happy enough with the result, and it was a pretty good experience over all—and I’m curious whether anyone will do anything with it or the source!</p>
+      <p>Part of what I wanted to figure out with all this is how viable it would be to use raymarching to create practical applications. My stance now is that it mostly depends on how well you know the domain. It’s specialized, there’s a lot to it. I could hack something together, but I’m sure if some of the experts on Shadertoy were to attempt something similar, the results would have been far superior. In any case, I’m happy enough with the result, and it was a pretty good experience over all—and I’m curious whether anyone will do anything with it or <a href='https://github.com/westoncb/conwayz'>the source!</a></p>
+    </div>
+
+    <hr class='main-hr'>
+    <div class='writeup'>
+      <div class='title'>Credits</div>
+      <p>I'd never have heard of raymarching or distance functions if it hadn't been for 'Iñigo Quilez – iq/rgba,' and these notes to a presentation he gave: <a href='http://www.iquilezles.org/www/material/nvscene2008/rwwtt.pdf' target="_blank">Rendering Worlds with Two Triangles with raytracing on the GPU in 4096 bytes</a>.</p>
+
+      <p>While I put some time into attempting to write my own raymarcher in the past, that wasn't really the focus of this project and I used a lot of the core pieces, nearly word for word, from this cool project: <a href="https://www.shadertoy.com/view/llVXRd">https://www.shadertoy.com/view/llVXRd</a> (which I should point out, itself mentions that the raymarching in it is adapted from this tutorial-project <a href="https://www.shadertoy.com/view/Xl2XWt">https://www.shadertoy.com/view/Xl2XWt</a>).</p>
+
+      <p>I hadn't heard of this nice utils library before this project, but ended up using a few functions of their's: <a href="http://mercury.sexy/hg_sdf/">hg_sdf</a></p>
+
+      <p>For the texture on the ground, I used iq's noise function from here: <a href="https://www.shadertoy.com/view/Msf3WH">https://www.shadertoy.com/view/Msf3WH</a></p>
+
+      <p>I also used Three.js for quite a bit, starting with a raymarching demo in their examples collection, which I harvested for boilerplate kinds of things to set up the fullscreen quad and camera. That demo is <a href="https://threejs.org/examples/?q=raym#webgl_raymarching_reflect">here</a>.</p>
+
+      <p>Half of the Conway's 'patterns' I used came from <a href='http://canb.auug.org.au/~dbell'>David Ingalls Bell</a>.</p>
+
+      <p>The other half came from a pattern collection by <a href='http://www.mindspring.com/~alanh/'>Alan Hensel</a>.</p>
+
+      <center><div class='title'>The End</div></center>
     </div>
 
     <script src="lib/three.js"></script>
