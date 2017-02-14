@@ -247,23 +247,24 @@ li {
 }
 
 a:link {
-    color: #efeaff;
+  color: #d1deeb;
 }
 a:visited {
-    color: #efeaff;
+  color: #d1deeb;
 }
 a:hover {
-    color: #22dd77 !important;
-    text-decoration: none !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
 }
 a:active {
-    color: #12e068 !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
 }
 
 .dropdown-menu>li>a:hover {
-    color: #262626;
-    text-decoration: none;
-    background-color: #AAA !important;
+  color: #262626;
+  text-decoration: none;
+  background-color: #AAA !important;
 }
 
 .main-hr {
