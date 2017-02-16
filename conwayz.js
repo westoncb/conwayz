@@ -350,12 +350,16 @@ function toggleCellWithCursor() {
 
   var cell = grid[row][col];
   
-  if (cell[0] === 1) {
+  if (cell[0] === 1) { //The cell was alive previously
+
+    //Give the cell a 'dead' state, without animating
     cell[0] = 0;
     cell[1] = 0;
-    cell[2] = 1;
+    cell[2] = 0;
     cell[3] = 0;
   } else {
+
+    //Give the cell a 'living' state, without animating
     cell[0] = 1;
     cell[1] = 1;
     cell[2] = 0;
@@ -764,6 +768,13 @@ function parseGridText(text, dimensions) {
       fillRow(grid[gridRowIndex], [], width);
       gridRowIndex++;
     }
+  }
+
+  
+  //Add empty rows for the difference between specified
+  //grid height and the actual data provided
+  for (var i = gridRowIndex; i < height; i++) {
+    fillRow(grid[i], [], width);
   }
 
   return grid;
