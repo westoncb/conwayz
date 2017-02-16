@@ -2,9 +2,9 @@
 
 Conway's Game of Life, with good graphics. 
 
-![Alt text](http://westoncb.com/images/conwayzscreen.png "Screenshot")
+![Alt text](http://symbolflux.com/images/conwayzscreen.png "Screenshot")
 
-http://westoncb.com/conwayz/
+http://symbolflux.com/conwayz/
 
 ## License
 
