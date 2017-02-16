@@ -1,0 +1,4 @@
+#C An c/10 orthogonal spaceship found on March 5, 2016.
+#C http://www.conwaylife.com/wiki/Copperhead
+x = 8, y = 12
+b2o2b2o$3b2o$3b2o$obo2bobo$o6bo2$o6bo$b2o2b2o$2b4o2$3b2o$3b2o!
