@@ -698,23 +698,25 @@ function parseConwaysConfig(text) {
 }
 
 function parseGridText(text, dimensions) {
-  var rows = text.split("$");
+  var textRows = text.split("$");
   var width = dimensions[0];
   var height = dimensions[1];
   var grid = new Array(height);
+  var gridRowIndex = 0;
   for (var i = 0; i < grid.length; i++) {
     grid[i] = new Array(width);
   }
 
-  rows.forEach(function(row, j) {
+  for (var j = 0; j < textRows.length; j++) {
+    var textRow = textRows[j];
     var inNumChunk = false;
     var inBOChunk = false;
     var numChunk = "";
     var boChunk = "";
     var chunks = [];
 
-    for (var i = 0; i < row.length; i++) {
-      var char = row[i];
+    for (var i = 0; i < textRow.length; i++) {
+      var char = textRow[i];
 
       if (char === 'o' || char === 'b') { //Live cell or dead cell
         if (inBOChunk) {
@@ -730,7 +732,7 @@ function parseGridText(text, dimensions) {
           inNumChunk = false;
         }
 
-        if (i === row.length-1 || row[i+1] === "!") {
+        if (i === textRow.length-1 || textRow[i+1] === "!") {
           chunks.push(boChunk);
         }
       } else if (!isNaN(char)) { //It's a number
@@ -748,22 +750,26 @@ function parseGridText(text, dimensions) {
           inBOChunk = false;
         }
 
-        if (i === row.length-1 || row[i+1] === "!") {
+        if (i === textRow.length-1 || textRow[i+1] === "!") {
           chunks.push(numChunk);
         }
       } else if (char !== "!") { // "!" indicates the end of the data
-        console.log("ERROR: unexpected character in config file grid data.");
+        console.log("ERROR: unexpected character in config file grid data: ", char);
       }
     }
 
-    fillRow(grid[j], chunks, width);
-    
-  });
+    var blankRowsToAdd = fillRow(grid[gridRowIndex], chunks, width);
+    gridRowIndex++;
+    for (var i = 0; i < blankRowsToAdd; i++) {
+      fillRow(grid[gridRowIndex], [], width);
+      gridRowIndex++;
+    }
+  }
 
   
   //Add empty rows for the difference between specified
   //grid height and the actual data provided
-  for (var i = rows.length; i < height; i++) {
+  for (var i = textRows.length; i < height; i++) {
     fillRow(grid[i], [], width);
   }
 
@@ -773,10 +779,17 @@ function parseGridText(text, dimensions) {
 function fillRow(row, chunks, rowSize) {
   var rowIndex = 0;
   var tagCount = 1;
+  var blankRowsToAdd = 0;
 
-  chunks.forEach(function(chunk) {
+  chunks.forEach(function(chunk, chunkIndex) {
 
     if (!isNaN(chunk)) { //It's a number
+      if (chunkIndex === chunks.length-1) {
+        //We subtract one since the chunk actually says how many lines
+        //to move down, not how many blank rows to insert—and we always
+        //want to move down one line.
+        blankRowsToAdd = chunk - 1;
+      }
       tagCount = chunk;
     } else {
       for (var i = 0; i < chunk.length; i++) {
@@ -807,6 +820,8 @@ function fillRow(row, chunks, rowSize) {
   for (var i = rowIndex; i < rowSize; i++) {
     row[i] = 0;
   }
+
+  return blankRowsToAdd;
 }
 
 function readTextFile(file, completion)
