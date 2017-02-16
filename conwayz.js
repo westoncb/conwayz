@@ -766,13 +766,6 @@ function parseGridText(text, dimensions) {
     }
   }
 
-  
-  //Add empty rows for the difference between specified
-  //grid height and the actual data provided
-  for (var i = textRows.length; i < height; i++) {
-    fillRow(grid[i], [], width);
-  }
-
   return grid;
 }
 
