@@ -1001,7 +1001,8 @@ function doConditionalLayoutMods() {
       $('.writeup').removeClass('writeup').addClass('writeup-mobile');
     }
 
-  } else {
+  } else { //Not mobile and we have webgl
+
     $('.title-block').css('margin-bottom', '-10px');
     $('.center-column').prepend($('<canvas id="canvas" tabindex=0></canvas>'));
     initThreejs();

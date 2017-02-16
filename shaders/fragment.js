@@ -377,6 +377,9 @@ void main()
 {
   vec2 coord = gl_FragCoord.xy;
 
+  //During a 'pickPass' we cast a ray from the
+  //current mouse position rather than the current
+  //gl_FragCoord
   if (pickPass) {
     coord = mousePos;
   }
